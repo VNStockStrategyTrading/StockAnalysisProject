@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VCB · CTG · BID — So sánh Đầu tư 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+/* ══════════════════════════════════════════
+   DESIGN SYSTEM — Multi-Bank Comparison
+   IB Research · SimplyWallSt Dashboard Style
+   Font: Plus Jakarta Sans + IBM Plex Mono
+   Palette: Deep slate + per-bank accent
+══════════════════════════════════════════ */
+:root {
+  --bg0:#090C12; --bg1:#0F1319; --bg2:#161B25; --bg3:#1D2432; --bg4:#242C3D; --bg5:#2D3650;
+  --bdr0:rgba(255,255,255,.04); --bdr1:rgba(255,255,255,.08); --bdr2:rgba(255,255,255,.14); --bdr3:rgba(255,255,255,.20);
+  --t0:#E8EDF7; --t1:#8D98B3; --t2:#546078; --t3:#323D52;
+  /* Per-bank colours */
+  --vcb:#10B981; --vcbL:rgba(16,185,129,.12); --vcbB:rgba(16,185,129,.25);
+  --ctg:#3B82F6; --ctgL:rgba(59,130,246,.12); --ctgB:rgba(59,130,246,.25);
+  --bid:#EF4444; --bidL:rgba(239,68,68,.12); --bidB:rgba(239,68,68,.25);
+  --gold:#F59E0B; --goldL:rgba(245,158,11,.12); --goldB:rgba(245,158,11,.25);
+  --r:10px; --rl:16px; --rx:22px;
+  --sh:0 6px 30px rgba(0,0,0,.45);
+  --tr:all .18s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg0);color:var(--t0);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+/* ══ NAV ══ */
+.nav{position:sticky;top:0;z-index:300;background:rgba(9,12,18,.94);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr0);height:56px;display:flex;align-items:center}
+.nv{max-width:1360px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;width:100%}
+.nbrand{display:flex;align-items:center;gap:8px}
+.nchips{display:flex;gap:4px}
+.nchip{font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:.06em}
+.nv-cn{background:var(--vcbL);color:var(--vcb);border:1px solid var(--vcbB)}
+.nc-ct{background:var(--ctgL);color:var(--ctg);border:1px solid var(--ctgB)}
+.nc-bi{background:var(--bidL);color:var(--bid);border:1px solid var(--bidB)}
+.ntitle{font-size:13px;font-weight:700;color:var(--t0);margin-left:4px}
+.nlinks{display:flex;gap:2px;list-style:none}
+.nlinks a{font-size:11px;font-weight:500;color:var(--t2);text-decoration:none;padding:5px 10px;border-radius:6px;transition:var(--tr);letter-spacing:.05em;text-transform:uppercase}
+.nlinks a:hover,.nlinks a.on{color:var(--t0);background:var(--bg3)}
+.ncta{font-size:11.5px;font-weight:700;background:var(--gold);color:var(--bg0);padding:7px 16px;border-radius:8px;text-decoration:none;transition:var(--tr);letter-spacing:.04em}
+.ncta:hover{filter:brightness(1.1)}
+.ham{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:5px}
+.ham span{width:18px;height:1.5px;background:var(--t2);border-radius:1px;display:block}
+
+/* ══ LAYOUT ══ */
+.w{max-width:1360px;margin:0 auto;padding:0 2rem}
+section{padding:56px 0}
+hr.div{border:none;border-top:1px solid var(--bdr0);margin:0}
+.sec-ey{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.sebar{width:20px;height:2px;background:var(--gold)}
+.se-txt{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase}
+.sec-h{font-size:clamp(1.375rem,2.5vw,1.875rem);font-weight:800;color:var(--t0);margin-bottom:8px;line-height:1.15}
+.sec-p{font-size:.875rem;color:var(--t1);line-height:1.6;max-width:600px}
+.shd{margin-bottom:32px}
+
+/* ══ HERO ══ */
+.hero{
+  padding:52px 0 44px;
+  background:
+    radial-gradient(ellipse 40% 60% at 15% 20%,rgba(16,185,129,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 60% at 50% 80%,rgba(59,130,246,.05) 0%,transparent 55%),
+    radial-gradient(ellipse 30% 50% at 90% 30%,rgba(239,68,68,.05) 0%,transparent 55%),
+    var(--bg1);
+  border-bottom:1px solid var(--bdr0);overflow:hidden;position:relative;
+}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='16' cy='16' r='.6' fill='%23ffffff' fill-opacity='0.025'/%3E%3C/svg%3E");pointer-events:none}
+.hero-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px}
+.hero-left{max-width:640px}
+.hero-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.h-line{width:24px;height:2px;background:var(--gold)}
+.h-eye{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase}
+.hero-h{font-size:clamp(2rem,3.8vw,3rem);font-weight:800;line-height:1.06;color:var(--t0);margin-bottom:12px}
+.hero-h .g{color:var(--gold)} .hero-h .vs{color:var(--t2);font-size:.65em;font-weight:400}
+.hero-p{font-size:.9375rem;color:var(--t1);line-height:1.7;font-weight:300;margin-bottom:24px}
+.hero-tags{display:flex;flex-wrap:wrap;gap:6px}
+.ht{font-size:10px;font-weight:600;color:var(--t1);background:var(--bg3);padding:4px 10px;border-radius:20px;border:1px solid var(--bdr1)}
+
+/* HERO RIGHT — 3 bank mini-cards */
+.hero-banks{display:flex;gap:10px}
+.bank-mini{
+  background:var(--bg2);border-radius:var(--rl);padding:18px 16px;min-width:130px;
+  text-align:center;transition:var(--tr);cursor:default;
+}
+.bank-mini:hover{background:var(--bg3);transform:translateY(-2px)}
+.bm-badge{display:inline-block;font-size:10px;font-weight:800;padding:3px 9px;border-radius:5px;letter-spacing:.06em;margin-bottom:10px}
+.bm-v{font-family:'IBM Plex Mono',monospace;font-size:1.3rem;font-weight:700;margin-bottom:3px}
+.bm-l{font-size:10px;color:var(--t3);font-weight:500}
+.bm-delta{font-size:11px;font-weight:700;margin-top:5px}
+.bm-v.g{color:var(--vcb)}.bm-v.b{color:var(--ctg)}.bm-v.r{color:var(--bid)}
+.vcb-b{background:var(--vcbL);color:var(--vcb);border:1px solid var(--vcbB)}
+.ctg-b{background:var(--ctgL);color:var(--ctg);border:1px solid var(--ctgB)}
+.bid-b{background:var(--bidL);color:var(--bid);border:1px solid var(--bidB)}
+
+/* ══ RANK PILL ══ */
+.rank{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;flex-shrink:0}
+.r1{background:var(--gold);color:var(--bg0)}
+.r2{background:var(--ctgL);color:var(--ctg);border:1px solid var(--ctgB)}
+.r3{background:var(--bg4);color:var(--t1)}
+
+/* ══ COMPARISON TABLE ══ */
+.comp-table{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rx);overflow:hidden;margin-bottom:14px}
+.ct-head{display:grid;padding:12px 20px;border-bottom:1px solid var(--bdr0);font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace}
+.ct-head.g4{grid-template-columns:220px 1fr 1fr 1fr}
+.ct-row{display:grid;padding:11px 20px;border-bottom:1px solid var(--bdr0);align-items:center;transition:background .12s}
+.ct-row:last-child{border-bottom:none}
+.ct-row.g4{grid-template-columns:220px 1fr 1fr 1fr}
+.ct-row:hover{background:rgba(255,255,255,.015)}
+.ct-metric{font-size:.8125rem;color:var(--t1);line-height:1.35}
+.ct-metric strong{color:var(--t0);font-weight:600;display:block;font-size:.75rem;font-family:'IBM Plex Mono',monospace}
+.ct-cell{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:.8125rem;font-weight:600;position:relative;padding:2px 0}
+.cv{font-family:'IBM Plex Mono',monospace;font-size:.875rem;font-weight:700;display:block}
+.cn{font-size:.6875rem;color:var(--t3);margin-top:2px;display:block;font-family:'Plus Jakarta Sans',sans-serif}
+.best{color:var(--gold);font-weight:800}
+.good{color:#6EE7B7}
+.mid{color:var(--ctg)}
+.low{color:var(--t1)}
+.warn{color:var(--bid)}
+.winner-bar{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:2px;background:var(--gold);border-radius:1px;width:60%;opacity:0;transition:var(--tr)}
+.ct-cell:hover .winner-bar{opacity:1}
+
+/* WINNER TAG */
+.wtag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.04em;font-family:'IBM Plex Mono',monospace}
+.wg{background:var(--vcbL);color:var(--vcb);border:1px solid var(--vcbB)}
+.wb{background:var(--ctgL);color:var(--ctg);border:1px solid var(--ctgB)}
+.wr{background:var(--bidL);color:var(--bid);border:1px solid var(--bidB)}
+
+/* ══ CHART CARDS ══ */
+.ch3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.ch2{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-bottom:14px}
+.ccard{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:20px;box-shadow:var(--sh)}
+.cc-ey{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.cc-h{font-size:.875rem;font-weight:700;color:var(--t0);margin-bottom:12px}
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
+.li{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--t1)}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* ══ SCORE CARD ══ */
+.score-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.sc{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:20px;transition:var(--tr)}
+.sc:hover{border-color:var(--bdr2);background:var(--bg3)}
+.sc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.sc-badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace}
+.sc-rank{display:flex;align-items:center;gap:6px}
+.sc-overall{font-family:'IBM Plex Mono',monospace;font-size:1.75rem;font-weight:700;margin-bottom:3px}
+.sc-label{font-size:.6875rem;color:var(--t3);text-transform:uppercase;letter-spacing:.06em}
+.sc-items{display:flex;flex-direction:column;gap:7px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bdr0)}
+.si{display:flex;justify-content:space-between;align-items:center;font-size:.75rem}
+.si-l{color:var(--t2)}
+.si-v{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.6875rem}
+/* Bar inside score card */
+.bar-row{display:flex;align-items:center;gap:8px}
+.mini-bar{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.mini-fill{height:100%;border-radius:2px;transition:width .8s ease .3s}
+
+/* ══ DRIVER TABLE ══ */
+.driver-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.driver-card{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:18px}
+.dc-title{font-size:.8125rem;font-weight:700;color:var(--t0);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.dc-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.driver-list{display:flex;flex-direction:column;gap:8px}
+.dl{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:8px;font-size:.75rem;padding:7px 10px;border-radius:8px;background:var(--bg3);transition:var(--tr)}
+.dl:hover{background:var(--bg4)}
+.dl-name{color:var(--t0);font-weight:500}
+.dl-v{font-family:'IBM Plex Mono',monospace;font-size:.6875rem;font-weight:700}
+
+/* ══ CATALYST TIMELINE ══ */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:grid;grid-template-columns:100px 1fr 1fr 1fr;align-items:center;padding:12px 20px;border-bottom:1px solid var(--bdr0);transition:background .12s}
+.tl-item:last-child{border-bottom:none}
+.tl-item:hover{background:rgba(255,255,255,.015)}
+.tl-q{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:var(--t3)}
+.tl-cell{font-size:.75rem;line-height:1.4}
+.cat-pill{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;font-family:'IBM Plex Mono',monospace}
+.cp-g{background:var(--vcbL);color:var(--vcb);border:1px solid var(--vcbB)}
+.cp-b{background:var(--ctgL);color:var(--ctg);border:1px solid var(--ctgB)}
+.cp-r{background:var(--bidL);color:var(--bid);border:1px solid var(--bidB)}
+.cp-n{background:var(--bg4);color:var(--t2)}
+
+/* ══ RANKING SECTION ══ */
+.rank-table{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rx);overflow:hidden}
+.rt-row{display:grid;grid-template-columns:48px 1fr auto;gap:16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--bdr0);transition:background .12s}
+.rt-row:last-child{border-bottom:none}.rt-row:hover{background:rgba(255,255,255,.015)}
+.rt-row.header{background:rgba(255,255,255,.025);padding:10px 20px}
+.rt-th{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase}
+.rt-bank{display:flex;align-items:center;gap:10px}
+.rt-badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace}
+.rt-name{font-size:.875rem;font-weight:700;color:var(--t0)}
+.rt-sub{font-size:.6875rem;color:var(--t2)}
+.rt-score-wrap{display:flex;align-items:center;gap:10px}
+.rt-score{font-family:'IBM Plex Mono',monospace;font-size:1.25rem;font-weight:800}
+.rt-tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px}
+
+/* ══ CTA BOX ══ */
+.cta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.cta-c{border-radius:var(--rl);padding:22px;position:relative;overflow:hidden}
+.cta-c::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent)}
+.cta-c.vcb{background:var(--vcbL);border:1px solid var(--vcbB)}
+.cta-c.ctg{background:var(--ctgL);border:1px solid var(--ctgB)}
+.cta-c.bid{background:var(--bidL);border:1px solid var(--bidB)}
+.cta-badge{font-size:10px;font-weight:800;padding:3px 9px;border-radius:5px;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace;display:inline-block;margin-bottom:12px}
+.cta-title{font-size:1rem;font-weight:800;margin-bottom:6px;line-height:1.2}
+.cta-verdict{font-size:.6875rem;font-weight:700;padding:4px 10px;border-radius:20px;font-family:'IBM Plex Mono',monospace;display:inline-block;margin-bottom:12px}
+.cta-items{display:flex;flex-direction:column;gap:5px}
+.cta-item{display:flex;gap:6px;align-items:flex-start;font-size:.75rem;line-height:1.4}
+.cta-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.vcb .cta-dot{background:var(--vcb)}.ctg .cta-dot{background:var(--ctg)}.bid .cta-dot{background:var(--bid)}
+.cta-c.vcb .cta-title,.cta-c.vcb .cta-item{color:rgba(16,185,129,.9)}
+.cta-c.ctg .cta-title,.cta-c.ctg .cta-item{color:rgba(59,130,246,.9)}
+.cta-c.bid .cta-title,.cta-c.bid .cta-item{color:rgba(239,68,68,.9)}
+.cta-c.vcb .cta-item strong,.cta-c.ctg .cta-item strong,.cta-c.bid .cta-item strong{color:var(--t0)}
+
+/* ══ INSIGHT BOX ══ */
+.insight{background:var(--bg2);border:1px solid var(--goldB);border-left:3px solid var(--gold);border-radius:0 var(--rl) var(--rl) 0;padding:16px 20px;margin-bottom:12px}
+.insight-h{font-size:.6875rem;font-weight:700;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:6px}
+.insight p{font-size:.8125rem;color:var(--t0);line-height:1.65}
+.insight strong{color:var(--gold);font-weight:700}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+.rv.vis{opacity:1;transform:none}
+
+/* FOOTER */
+footer{background:var(--bg1);border-top:1px solid var(--bdr0);padding:24px 0;margin-top:48px}
+.ft{max-width:1360px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.ft-brand{font-size:13px;font-weight:700;color:var(--t0)}
+.ft-sub{font-size:11px;color:var(--t3);margin-top:2px}
+.ft-disc{font-size:.6875rem;color:var(--t3);line-height:1.7;margin-top:12px;padding-top:12px;border-top:1px solid var(--bdr0)}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1024px){.hero-banks{flex-direction:row;flex-wrap:wrap}}
+@media(max-width:900px){.ch3,.score-row,.cta-grid{grid-template-columns:1fr}.ch2{grid-template-columns:1fr}.driver-grid{grid-template-columns:1fr}.ct-head.g4,.ct-row.g4{grid-template-columns:160px 1fr 1fr 1fr}.hero-banks{flex-direction:row}}
+@media(max-width:768px){section{padding:40px 0}.hero{padding:40px 0 32px}.hero-inner{flex-direction:column}.hero-banks{width:100%;justify-content:stretch}.bank-mini{flex:1}.nlinks,.ncta{display:none}.ham{display:flex}}
+@media(max-width:600px){.hero-banks{flex-wrap:wrap}.ct-head.g4,.ct-row.g4{grid-template-columns:120px 1fr 1fr 1fr;font-size:.7rem}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nv">
+    <div class="nbrand">
+      <div class="nchips">
+        <span class="nchip nv-cn">VCB</span>
+        <span class="nchip nc-ct">CTG</span>
+        <span class="nchip nc-bi">BID</span>
+      </div>
+      <span class="ntitle">So sánh đầu tư Big 3 Ngân hàng 2026</span>
+    </div>
+    <ul class="nlinks" id="nl">
+      <li><a href="#quality">Chất lượng TS</a></li>
+      <li><a href="#profit">Sinh lời</a></li>
+      <li><a href="#growth">Tăng trưởng</a></li>
+      <li><a href="#drivers">Động lực</a></li>
+      <li><a href="#ranking">Kết luận</a></li>
+    </ul>
+    <a href="#ranking" class="ncta">Xếp hạng →</a>
+    <div class="ham" id="ham"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="w">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow"><div class="h-line"></div><span class="h-eye mono">Comparative Research · 25/04/2026</span></div>
+        <h1 class="hero-h">VCB <span class="vs">vs</span> CTG <span class="vs">vs</span> BID<br><span class="g">Big 3 — Ai dẫn đầu 2026?</span></h1>
+        <p class="hero-p">Phân tích đa chiều 3 ngân hàng thương mại quốc doanh hàng đầu Việt Nam. Tổng tài sản hợp nhất >8 triệu tỷ đồng — chiếm ~50% hệ thống. Mỗi ngân hàng có thesis riêng, catalyst khác nhau.</p>
+        <div class="hero-tags">
+          <span class="ht">Dữ liệu BCTC kiểm toán 2023–2025</span>
+          <span class="ht">Giá đóng cửa 24/04/2026</span>
+          <span class="ht">ĐHĐCĐ 24/04/2026</span>
+          <span class="ht">Nguồn: Deloitte / EY / PwC VN</span>
+        </div>
+      </div>
+      <div class="hero-banks">
+        <div class="bank-mini">
+          <span class="bm-badge vcb-b">VCB</span>
+          <div class="bm-v g mono">55.500đ</div>
+          <div class="bm-l">P/E 13,2×</div>
+          <div class="bm-delta" style="color:var(--vcb)">↑ +19–44%</div>
+        </div>
+        <div class="bank-mini">
+          <span class="bm-badge ctg-b">CTG</span>
+          <div class="bm-v b mono">35.650đ</div>
+          <div class="bm-l">P/E 8,0×</div>
+          <div class="bm-delta" style="color:var(--ctg)">↑ +25–46%</div>
+        </div>
+        <div class="bank-mini">
+          <span class="bm-badge bid-b">BID</span>
+          <div class="bm-v r mono">38.500đ</div>
+          <div class="bm-l">P/E 13,0×</div>
+          <div class="bm-delta" style="color:var(--bid)">↑ +17–54%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w">
+
+<!-- ══ S1: CHẤT LƯỢNG TÀI SẢN ══ -->
+<section id="quality">
+  <div class="shd rv">
+    <div class="sec-ey"><div class="sebar"></div><span class="se-txt mono">01 — Asset Quality</span></div>
+    <h2 class="sec-h">Chất lượng tài sản — Ai kiểm soát rủi ro tốt nhất?</h2>
+    <p class="sec-p">NPL thấp + Coverage ratio cao = nền tảng bền vững. Xếp hạng: <strong style="color:var(--vcb)">VCB #1</strong> · <strong style="color:var(--ctg)">CTG #2</strong> · <strong style="color:var(--bid)">BID #3</strong></p>
+  </div>
+
+  <div class="insight rv">
+    <div class="insight-h">💡 Insight chính</div>
+    <p><strong>VCB dẫn đầu tuyệt đối</strong> với NPL &lt;1% và LLCR 202% — tấm đệm dày nhất. CTG đang cải thiện nhanh với NPL 1,1% và LLCR 158,8% nhờ giảm dự phòng mạnh. BID có LLCR giảm xuống 105–120% — đây là <strong>rủi ro chính cần theo dõi</strong>.</p>
+  </div>
+
+  <div class="comp-table rv">
+    <div class="ct-head g4">
+      <div>Chỉ tiêu</div>
+      <div style="text-align:center;color:var(--vcb)">VCB · Vietcombank</div>
+      <div style="text-align:center;color:var(--ctg)">CTG · VietinBank</div>
+      <div style="text-align:center;color:var(--bid)">BID · BIDV</div>
+    </div>
+    <!-- NPL -->
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>NPL Ratio</strong>Nợ xấu / Tổng dư nợ</div>
+      <div class="ct-cell"><span class="cv best">&lt;1,0%</span><span class="cn">🥇 Thấp nhất 3 năm liên</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">1,1%</span><span class="cn">Giảm từ 1,45% (2024)</span></div>
+      <div class="ct-cell"><span class="cv mid">1,2%</span><span class="cn">Cải thiện từ 1,41% (2024)</span></div>
+    </div>
+    <!-- LLCR -->
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>Coverage Ratio (LLCR)</strong>Bao phủ nợ xấu</div>
+      <div class="ct-cell"><span class="cv best">~202%</span><span class="cn">🥇 #1 toàn hệ thống</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">158,8%</span><span class="cn">Top 2 — bộ đệm tốt</span></div>
+      <div class="ct-cell"><span class="cv warn">105–120%</span><span class="cn">⚠️ Giảm từ 131% (2024)</span></div>
+    </div>
+    <!-- CAR -->
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>CAR (Hệ số an toàn vốn)</strong>Capital Adequacy Ratio</div>
+      <div class="ct-cell"><span class="cv best">12%</span><span class="cn">🥇 Basel II → Basel III</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv mid">10,5%</span><span class="cn">Sau tăng vốn 2026</span></div>
+      <div class="ct-cell"><span class="cv low">9,0%</span><span class="cn">→ 9,5–10% sau tăng vốn</span></div>
+    </div>
+    <!-- NPL target -->
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>NPL Mục tiêu 2026</strong>Target kiểm soát</div>
+      <div class="ct-cell"><span class="cv best">&lt;1,5%</span><span class="cn">Rất thận trọng</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">&lt;1,8%</span><span class="cn">Quản lý chủ động</span></div>
+      <div class="ct-cell"><span class="cv mid">&lt;1,6%</span><span class="cn">Theo kế hoạch ĐHĐCĐ</span></div>
+    </div>
+    <!-- Tài sản bảo đảm -->
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>Tài sản bảo đảm / Dư nợ</strong>Collateral coverage</div>
+      <div class="ct-cell"><span class="cv best">>100%</span><span class="cn">TSBD 1,89PT > dư nợ 1,67PT</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv mid">~95%</span><span class="cn">Đủ an toàn</span></div>
+      <div class="ct-cell"><span class="cv good">>100%</span><span class="cn">TSBD 1,89PT > dư nợ 1,67PT</span></div>
+    </div>
+    <!-- Xếp hạng -->
+    <div class="ct-row g4" style="background:rgba(255,255,255,.02)">
+      <div class="ct-metric"><strong style="color:var(--gold)">🏆 XẾP HẠNG</strong></div>
+      <div class="ct-cell"><span class="rank r1">1</span> <span class="wtag wg">BEST</span></div>
+      <div class="ct-cell"><span class="rank r2">2</span> <span class="wtag wb">GOOD</span></div>
+      <div class="ct-cell"><span class="rank r3">3</span> <span class="wtag" style="background:var(--bg4);color:var(--t1);border:1px solid var(--bdr1)">WATCH</span></div>
+    </div>
+  </div>
+
+  <!-- Chart: NPL & Coverage -->
+  <div class="ch3 rv">
+    <div class="ccard">
+      <div class="cc-ey mono">Asset Quality</div>
+      <div class="cc-h">NPL Ratio so sánh 2023–2025 (%)</div>
+      <div style="position:relative;height:180px"><canvas id="nplChart"></canvas></div>
+    </div>
+    <div class="ccard">
+      <div class="cc-ey mono">Coverage Ratio</div>
+      <div class="cc-h">Tỷ lệ bao phủ nợ xấu (%)</div>
+      <div style="position:relative;height:180px"><canvas id="covChart"></canvas></div>
+    </div>
+    <div class="ccard">
+      <div class="cc-ey mono">Capital Safety</div>
+      <div class="cc-h">CAR so sánh 2024–2026E (%)</div>
+      <div style="position:relative;height:180px"><canvas id="carChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ S2: KHẢ NĂNG SINH LỜI ══ -->
+<section id="profit">
+  <div class="shd rv">
+    <div class="sec-ey"><div class="sebar"></div><span class="se-txt mono">02 — Profitability</span></div>
+    <h2 class="sec-h">Khả năng sinh lời — Ai kiếm tiền hiệu quả nhất?</h2>
+    <p class="sec-p">Xếp hạng: <strong style="color:var(--ctg)">CTG #1</strong> (ROE cao, P/E thấp nhất) · <strong style="color:var(--vcb)">VCB #2</strong> (ROA #1, NIM tốt) · <strong style="color:var(--bid)">BID #3</strong> (NIM thấp nhất)</p>
+  </div>
+
+  <div class="insight rv">
+    <div class="insight-h">💡 Insight chính</div>
+    <p><strong>CTG bất ngờ dẫn đầu ROE 21,25%</strong> — cao nhất Big 3 nhờ dự phòng giảm mạnh 37,3%. VCB có ROA tốt nhất 1,6% và CASA 35,42% — chi phí vốn thấp nhất. BID có <strong>NIM thấp nhất 2,33–2,4%</strong> do phải hỗ trợ lãi suất theo chỉ đạo nhà nước.</p>
+  </div>
+
+  <div class="comp-table rv">
+    <div class="ct-head g4">
+      <div>Chỉ tiêu</div>
+      <div style="text-align:center;color:var(--vcb)">VCB · Vietcombank</div>
+      <div style="text-align:center;color:var(--ctg)">CTG · VietinBank</div>
+      <div style="text-align:center;color:var(--bid)">BID · BIDV</div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>ROE 2025</strong>Lợi nhuận / Vốn CSH</div>
+      <div class="ct-cell"><span class="cv mid">~16–17%</span><span class="cn">⚠️ Giảm do pha loãng 49,5% CP</span></div>
+      <div class="ct-cell"><span class="cv best">21,25%</span><span class="cn">🥇 Cao nhất Big 3 — Dự phòng giảm</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">19,02%</span><span class="cn">Ổn định 3 năm liên</span></div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>ROA 2025</strong>Lợi nhuận / Tổng TS</div>
+      <div class="ct-cell"><span class="cv best">~1,6%</span><span class="cn">🥇 Hiệu quả sử dụng tài sản #1</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">1,69%</span><span class="cn">Tốt, cải thiện từ 1,3%</span></div>
+      <div class="ct-cell"><span class="cv mid">1,01%</span><span class="cn">Thấp hơn do tổng TS lớn nhất</span></div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>NIM 2025</strong>Net Interest Margin</div>
+      <div class="ct-cell"><span class="cv best">~2,8–2,9%</span><span class="cn">🥇 CASA 35,42% — COF thấp nhất</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">2,59%</span><span class="cn">Tăng nhẹ — CASA 25,5%</span></div>
+      <div class="ct-cell"><span class="cv warn">~2,33–2,4%</span><span class="cn">⚠️ Thấp nhất — áp lực chính sách</span></div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>CIR 2025</strong>Chi phí / Thu nhập</div>
+      <div class="ct-cell"><span class="cv best">33,2%</span><span class="cn">🥇 Hiệu quả nhất Big 3</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">~35%</span><span class="cn">Cải thiện dần qua các năm</span></div>
+      <div class="ct-cell"><span class="cv mid">~34,9%</span><span class="cn">Giảm mạnh từ 38% (2023)</span></div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>LNTT 2025 (tỷ đ)</strong>Lợi nhuận trước thuế</div>
+      <div class="ct-cell"><span class="cv best">44.020</span><span class="cn">🥇 #1 toàn hệ thống</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">43.400</span><span class="cn">#2 — tăng +36,8%</span></div>
+      <div class="ct-cell"><span class="cv mid">36.000</span><span class="cn">#3 — Kỷ lục BIDV</span></div>
+    </div>
+    <div class="ct-row g4" style="background:rgba(255,255,255,.02)">
+      <div class="ct-metric"><strong style="color:var(--gold)">🏆 XẾP HẠNG</strong></div>
+      <div class="ct-cell"><span class="rank r2">2</span> <span class="wtag wg">ROA #1 · NIM #1</span></div>
+      <div class="ct-cell"><span class="rank r1">1</span> <span class="wtag wb">ROE #1 · P/E thấp</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="rank r3">3</span> <span class="wtag wr">NIM thấp nhất</span></div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="ch2 rv">
+    <div class="ccard">
+      <div class="cc-ey mono">ROE / ROA Comparison</div>
+      <div class="cc-h">ROE & ROA so sánh 2023–2025</div>
+      <div class="leg"><div class="li"><div class="ld" style="background:var(--vcb)"></div>VCB ROE</div><div class="li"><div class="ld" style="background:var(--ctg)"></div>CTG ROE</div><div class="li"><div class="ld" style="background:var(--bid)"></div>BID ROE</div></div>
+      <div style="position:relative;height:200px"><canvas id="roeChart"></canvas></div>
+    </div>
+    <div class="ccard">
+      <div class="cc-ey mono">NIM Trend</div>
+      <div class="cc-h">NIM so sánh 2023–2025 (%)</div>
+      <div class="leg"><div class="li"><div class="ld" style="background:var(--vcb)"></div>VCB</div><div class="li"><div class="ld" style="background:var(--ctg)"></div>CTG</div><div class="li"><div class="ld" style="background:var(--bid)"></div>BID</div></div>
+      <div style="position:relative;height:200px"><canvas id="nimChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ S3: TĂNG TRƯỞNG ══ -->
+<section id="growth">
+  <div class="shd rv">
+    <div class="sec-ey"><div class="sebar"></div><span class="se-txt mono">03 — Growth</span></div>
+    <h2 class="sec-h">Tăng trưởng — Ai dự báo mạnh nhất 2026?</h2>
+    <p class="sec-p">Xếp hạng: <strong style="color:var(--ctg)">CTG #1</strong> (tín dụng 17%) · <strong style="color:var(--bid)">BID #2</strong> (tín dụng 15–16%) · <strong style="color:var(--vcb)">VCB #3</strong> (chọn chất 10%)</p>
+  </div>
+
+  <div class="insight rv">
+    <div class="insight-h">💡 Insight chính</div>
+    <p>CTG đăng ký <strong>tín dụng 17% cao nhất Big 3</strong> nhờ dự phòng giảm + CASA cải thiện. BID tăng mạnh 15–16% nhờ đầu tư công. VCB chủ động <strong>chọn chất lượng hơn tốc độ (10%)</strong> — đây là chiến lược bền vững nhất nhưng tăng trưởng ngắn hạn chậm hơn.</p>
+  </div>
+
+  <div class="comp-table rv">
+    <div class="ct-head g4">
+      <div>Chỉ tiêu</div>
+      <div style="text-align:center;color:var(--vcb)">VCB</div>
+      <div style="text-align:center;color:var(--ctg)">CTG</div>
+      <div style="text-align:center;color:var(--bid)">BID</div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>Tín dụng 2026E</strong>Credit growth target</div>
+      <div class="ct-cell"><span class="cv low">~10%</span><span class="cn">Chọn chất hơn lượng</span></div>
+      <div class="ct-cell"><span class="cv best">~17%</span><span class="cn">🥇 Cao nhất Big 3</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">15–16%</span><span class="cn">Đầu tư công + bán lẻ</span></div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>CASA Ratio 2025</strong>Tiền gửi không kỳ hạn</div>
+      <div class="ct-cell"><span class="cv best">35,42%</span><span class="cn">🥇 Cao nhất Big 3 (Top 3 ngành)</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">25,5%</span><span class="cn">+0,7đ% — Đang cải thiện</span></div>
+      <div class="ct-cell"><span class="cv warn">~16–18%</span><span class="cn">⚠️ Thấp nhất Big 4</span></div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>LN mục tiêu 2026</strong>Profit growth target</div>
+      <div class="ct-cell"><span class="cv mid">+5%</span><span class="cn">~46.200 tỷ</span></div>
+      <div class="ct-cell"><span class="cv best">+10–15%</span><span class="cn">🥇 ~47.500–50.000 tỷ</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">+10%</span><span class="cn">~39.600 tỷ kỷ lục</span></div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>LNST CAGR 3 năm</strong>EPS Growth momentum</div>
+      <div class="ct-cell"><span class="cv mid">+3–4%/năm</span><span class="cn">Pha loãng CP ảnh hưởng</span></div>
+      <div class="ct-cell"><span class="cv best">+15,7%/năm</span><span class="cn">🥇 CAGR 2021–2025 ấn tượng</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv good">+11,9%/năm</span><span class="cn">CAGR 2021–2025 bền vững</span></div>
+    </div>
+    <div class="ct-row g4">
+      <div class="ct-metric"><strong>Tổng tài sản 2026E</strong>Asset growth</div>
+      <div class="ct-cell"><span class="cv good">+10–12%</span><span class="cn">~2,7–2,75 triệu tỷ</span></div>
+      <div class="ct-cell"><span class="cv best">+15–18%</span><span class="cn">🥇 ~3,2–3,3 triệu tỷ</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="cv mid">+5–10%</span><span class="cn">~3,4–3,6 triệu tỷ (lớn nhất)</span></div>
+    </div>
+    <div class="ct-row g4" style="background:rgba(255,255,255,.02)">
+      <div class="ct-metric"><strong style="color:var(--gold)">🏆 XẾP HẠNG</strong></div>
+      <div class="ct-cell"><span class="rank r3">3</span> <span class="wtag wg">CASA #1 · Chất lượng</span></div>
+      <div class="ct-cell"><span class="rank r1">1</span> <span class="wtag wb">Tín dụng + LN target #1</span><div class="winner-bar"></div></div>
+      <div class="ct-cell"><span class="rank r2">2</span> <span class="wtag wr">Đầu tư công + Bán lẻ</span></div>
+    </div>
+  </div>
+
+  <!-- Growth Bar Chart -->
+  <div class="ch3 rv">
+    <div class="ccard">
+      <div class="cc-ey mono">Credit Growth Target 2026</div>
+      <div class="cc-h">Tăng trưởng tín dụng mục tiêu (%)</div>
+      <div style="position:relative;height:180px"><canvas id="creditChart"></canvas></div>
+    </div>
+    <div class="ccard">
+      <div class="cc-ey mono">CASA Comparison</div>
+      <div class="cc-h">CASA Ratio 2023–2025 (%)</div>
+      <div style="position:relative;height:180px"><canvas id="casaChart"></canvas></div>
+    </div>
+    <div class="ccard">
+      <div class="cc-ey mono">Profit Growth 2025</div>
+      <div class="cc-h">LNTT 3 ngân hàng 2023–2025 (nghìn tỷ)</div>
+      <div style="position:relative;height:180px"><canvas id="profitChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ S4: ĐỘNG LỰC ══ -->
+<section id="drivers">
+  <div class="shd rv">
+    <div class="sec-ey"><div class="sebar"></div><span class="se-txt mono">04 — Profit Drivers & Share Price Catalysts</span></div>
+    <h2 class="sec-h">Động lực tăng trưởng & Giá cổ phiếu</h2>
+    <p class="sec-p">Đánh giá sức mạnh của từng nguồn động lực theo thứ tự quan trọng.</p>
+  </div>
+
+  <!-- PROFIT DRIVERS -->
+  <div class="driver-grid rv">
+    <div class="driver-card">
+      <div class="dc-title"><div class="dc-icon" style="background:var(--vcbL)">🏦</div>Động lực LN chính — VCB</div>
+      <div class="driver-list">
+        <div class="dl"><span class="dl-name">Tăng trưởng tín dụng</span><span class="dl-v" style="color:var(--vcb)">+10%</span><span class="wtag wg">★★★</span><span class="cat-pill cp-n">Thận trọng</span></div>
+        <div class="dl"><span class="dl-name">NIM phục hồi</span><span class="dl-v" style="color:var(--vcb)">+3bps</span><span class="wtag wg">★★★★</span><span class="cat-pill cp-g">Catalyst</span></div>
+        <div class="dl"><span class="dl-name">Thu nhập ngoài lãi</span><span class="dl-v" style="color:var(--vcb)">Phí thu xếp</span><span class="wtag wg">★★★★</span><span class="cat-pill cp-g">Moat</span></div>
+        <div class="dl"><span class="dl-name">Chi phí dự phòng</span><span class="dl-v" style="color:var(--t2)">Ổn định</span><span class="wtag wg">★★★</span><span class="cat-pill cp-n">LLCR 202%</span></div>
+        <div class="dl"><span class="dl-name">Hiệu quả vận hành</span><span class="dl-v" style="color:var(--vcb)">CIR 33,2%</span><span class="wtag wg">★★★★★</span><span class="cat-pill cp-g">Best</span></div>
+      </div>
+    </div>
+    <div class="driver-card">
+      <div class="dc-title"><div class="dc-icon" style="background:var(--ctgL)">🏛️</div>Động lực LN chính — CTG</div>
+      <div class="driver-list">
+        <div class="dl"><span class="dl-name">Tăng trưởng tín dụng</span><span class="dl-v" style="color:var(--ctg)">+17%</span><span class="wtag wb">★★★★★</span><span class="cat-pill cp-b">Mạnh nhất</span></div>
+        <div class="dl"><span class="dl-name">Giảm chi phí dự phòng</span><span class="dl-v" style="color:var(--ctg)">-37,3%</span><span class="wtag wb">★★★★★</span><span class="cat-pill cp-b">Catalyst #1</span></div>
+        <div class="dl"><span class="dl-name">NIM cải thiện</span><span class="dl-v" style="color:var(--ctg)">+3bps</span><span class="wtag wb">★★★</span><span class="cat-pill cp-n">CASA tăng</span></div>
+        <div class="dl"><span class="dl-name">Thu hồi nợ xấu</span><span class="dl-v" style="color:var(--ctg)">10.000 tỷ</span><span class="wtag wb">★★★★</span><span class="cat-pill cp-b">2026</span></div>
+        <div class="dl"><span class="dl-name">Hiệu quả vận hành</span><span class="dl-v" style="color:var(--ctg)">CIR ~35%</span><span class="wtag wb">★★★★</span><span class="cat-pill cp-n">Cải thiện</span></div>
+      </div>
+    </div>
+    <div class="driver-card">
+      <div class="dc-title"><div class="dc-icon" style="background:var(--bidL)">🏗️</div>Động lực LN chính — BID</div>
+      <div class="driver-list">
+        <div class="dl"><span class="dl-name">Tăng trưởng tín dụng</span><span class="dl-v" style="color:var(--bid)">+15–16%</span><span class="wtag wr">★★★★</span><span class="cat-pill cp-r">ĐTC hỗ trợ</span></div>
+        <div class="dl"><span class="dl-name">NIM cải thiện</span><span class="dl-v" style="color:var(--bid)">+20–30bps</span><span class="wtag wr">★★★★★</span><span class="cat-pill cp-r">Catalyst lớn</span></div>
+        <div class="dl"><span class="dl-name">Bán lẻ & SME</span><span class="dl-v" style="color:var(--bid)">Mix shift</span><span class="wtag wr">★★★★</span><span class="cat-pill cp-r">NIM tăng</span></div>
+        <div class="dl"><span class="dl-name">Thu nhập phí thu xếp</span><span class="dl-v" style="color:var(--bid)">ĐTC 3,8PT</span><span class="wtag wr">★★★★★</span><span class="cat-pill cp-r">Moat #1</span></div>
+        <div class="dl"><span class="dl-name">Hiệu quả vận hành</span><span class="dl-v" style="color:var(--bid)">CIR 34,9%</span><span class="wtag wr">★★★★</span><span class="cat-pill cp-r">Cải thiện</span></div>
+      </div>
+    </div>
+    <div class="driver-card">
+      <div class="dc-title"><div class="dc-icon" style="background:var(--goldL)">📈</div>Động lực giá cổ phiếu — 2026</div>
+      <div class="driver-list">
+        <div class="dl"><span class="dl-name"><strong style="color:var(--vcb)">VCB</strong> — EPS Growth</span><span class="dl-v" style="color:var(--vcb)">+5%</span><span class="wtag wg">★★★</span><span class="cat-pill cp-g">+div ~4,4%</span></div>
+        <div class="dl"><span class="dl-name"><strong style="color:var(--vcb)">VCB</strong> — Re-rating Mizuho</span><span class="dl-v" style="color:var(--vcb)">P/B→3×</span><span class="wtag wg">★★★★★</span><span class="cat-pill cp-g">Catalyst</span></div>
+        <div class="dl"><span class="dl-name"><strong style="color:var(--ctg)">CTG</strong> — EPS Growth</span><span class="dl-v" style="color:var(--ctg)">+10–15%</span><span class="wtag wb">★★★★★</span><span class="cat-pill cp-b">Tốt nhất</span></div>
+        <div class="dl"><span class="dl-name"><strong style="color:var(--ctg)">CTG</strong> — Multiple Expand</span><span class="dl-v" style="color:var(--ctg)">P/E→9–10×</span><span class="wtag wb">★★★★★</span><span class="cat-pill cp-b">P/E 8× rất rẻ</span></div>
+        <div class="dl"><span class="dl-name"><strong style="color:var(--bid)">BID</strong> — EPS Growth</span><span class="dl-v" style="color:var(--bid)">+8%</span><span class="wtag wr">★★★</span><span class="cat-pill cp-r">Pha loãng</span></div>
+        <div class="dl"><span class="dl-name"><strong style="color:var(--bid)">BID</strong> — Tăng vốn Re-rating</span><span class="dl-v" style="color:var(--bid)">P/B→2,2×</span><span class="wtag wr">★★★★</span><span class="cat-pill cp-r">Khi HT</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARE PRICE CATALYST TIMELINE -->
+  <div class="comp-table rv">
+    <div class="ct-head" style="display:grid;grid-template-columns:100px 1fr 1fr 1fr;padding:12px 20px">
+      <div>Giai đoạn</div>
+      <div style="text-align:center;color:var(--vcb)">VCB</div>
+      <div style="text-align:center;color:var(--ctg)">CTG</div>
+      <div style="text-align:center;color:var(--bid)">BID</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-q mono">Q2 / 2026</div>
+      <div class="tl-cell"><span class="cat-pill cp-g">Tăng vốn 94k tỷ</span></div>
+      <div class="tl-cell"><span class="cat-pill cp-b">Dự phòng giảm tiếp</span></div>
+      <div class="tl-cell"><span class="cat-pill cp-r">Tăng vốn 26k tỷ</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-q mono">Q2–Q3</div>
+      <div class="tl-cell"><span class="cat-pill cp-g">Mizuho chốt 6,5%?</span></div>
+      <div class="tl-cell"><span class="cat-pill cp-b">Thu hồi 10k tỷ nợ xấu</span></div>
+      <div class="tl-cell"><span class="cat-pill cp-r">NIM phục hồi rõ</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-q mono">Q3 / 2026</div>
+      <div class="tl-cell"><span class="cat-pill cp-g">VIFC khai trương</span></div>
+      <div class="tl-cell"><span class="cat-pill cp-b">LNTT ≥11k tỷ/Q</span></div>
+      <div class="tl-cell"><span class="cat-pill cp-r">LNTT ≥9,5k tỷ/Q</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-q mono">Q4 / 2026</div>
+      <div class="tl-cell"><span class="cat-pill cp-g">Re-rating P/B 2,5×+</span></div>
+      <div class="tl-cell"><span class="cat-pill cp-b">VIFC + 5 VP nước ngoài</span></div>
+      <div class="tl-cell"><span class="cat-pill cp-r">Bán lẻ + SME bứt phá</span></div>
+    </div>
+    <!-- Dividend -->
+    <div class="tl-item" style="background:rgba(245,158,11,.04)">
+      <div class="tl-q mono" style="color:var(--gold)">Cổ tức 2026</div>
+      <div class="tl-cell"><span class="cat-pill" style="background:var(--goldL);color:var(--gold);border:1px solid var(--goldB)">~4,4% yield (tiền/CP)</span></div>
+      <div class="tl-cell"><span class="cat-pill" style="background:var(--goldL);color:var(--gold);border:1px solid var(--goldB)">Cổ phiếu 16.200 tỷ</span></div>
+      <div class="tl-cell"><span class="cat-pill" style="background:var(--goldL);color:var(--gold);border:1px solid var(--goldB)">4,5% tiền mặt 2024</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ══ S5: SCORE CARDS + RANKING ══ -->
+<section id="ranking">
+  <div class="shd rv">
+    <div class="sec-ey"><div class="sebar"></div><span class="se-txt mono">05 — Investment Ranking</span></div>
+    <h2 class="sec-h">Xếp hạng ưu tiên đầu tư 2026</h2>
+    <p class="sec-p">Đánh giá tổng hợp 5 chiều: Chất lượng TS · Sinh lời · Tăng trưởng · Định giá · Catalyst.</p>
+  </div>
+
+  <!-- SCORE CARDS -->
+  <div class="score-row rv">
+    <!-- CTG -->
+    <div class="sc" style="border-color:var(--ctgB)">
+      <div class="sc-head">
+        <div><span class="sc-badge ctg-b">CTG</span><div style="font-size:.75rem;color:var(--t2);margin-top:4px">VietinBank</div></div>
+        <div class="sc-rank"><span class="rank r1">1</span><span style="font-size:.6875rem;color:var(--gold);font-weight:700;margin-left:4px">ƯU TIÊN #1</span></div>
+      </div>
+      <div class="sc-overall" style="color:var(--ctg)">87</div>
+      <div class="sc-label mono">/ 100 điểm tổng hợp</div>
+      <div class="sc-items">
+        <div class="si"><span class="si-l">Chất lượng TS</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:80%;background:var(--ctg)"></div></div><span class="si-v" style="color:var(--ctg)">80</span></div></div>
+        <div class="si"><span class="si-l">Sinh lời (ROE #1)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:95%;background:var(--ctg)"></div></div><span class="si-v" style="color:var(--ctg)">95</span></div></div>
+        <div class="si"><span class="si-l">Tăng trưởng (tín dụng #1)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:92%;background:var(--ctg)"></div></div><span class="si-v" style="color:var(--ctg)">92</span></div></div>
+        <div class="si"><span class="si-l">Định giá (P/E 8× rất rẻ)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:98%;background:gold"></div></div><span class="si-v" style="color:var(--gold)">98</span></div></div>
+        <div class="si"><span class="si-l">Catalyst rõ ràng</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:90%;background:var(--ctg)"></div></div><span class="si-v" style="color:var(--ctg)">90</span></div></div>
+      </div>
+    </div>
+    <!-- VCB -->
+    <div class="sc" style="border-color:var(--vcbB)">
+      <div class="sc-head">
+        <div><span class="sc-badge vcb-b">VCB</span><div style="font-size:.75rem;color:var(--t2);margin-top:4px">Vietcombank</div></div>
+        <div class="sc-rank"><span class="rank r2">2</span><span style="font-size:.6875rem;color:var(--vcb);font-weight:700;margin-left:4px">ƯU TIÊN #2</span></div>
+      </div>
+      <div class="sc-overall" style="color:var(--vcb)">82</div>
+      <div class="sc-label mono">/ 100 điểm tổng hợp</div>
+      <div class="sc-items">
+        <div class="si"><span class="si-l">Chất lượng TS (LLCR #1)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:98%;background:gold"></div></div><span class="si-v" style="color:var(--gold)">98</span></div></div>
+        <div class="si"><span class="si-l">Sinh lời (ROA #1, NIM #1)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:88%;background:var(--vcb)"></div></div><span class="si-v" style="color:var(--vcb)">88</span></div></div>
+        <div class="si"><span class="si-l">Tăng trưởng (tín dụng 10%)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:60%;background:var(--vcb)"></div></div><span class="si-v" style="color:var(--vcb)">60</span></div></div>
+        <div class="si"><span class="si-l">Định giá (P/E 13,2× hợp lý)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:70%;background:var(--vcb)"></div></div><span class="si-v" style="color:var(--vcb)">70</span></div></div>
+        <div class="si"><span class="si-l">Catalyst (Mizuho deal)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:85%;background:var(--vcb)"></div></div><span class="si-v" style="color:var(--vcb)">85</span></div></div>
+      </div>
+    </div>
+    <!-- BID -->
+    <div class="sc" style="border-color:var(--bidB)">
+      <div class="sc-head">
+        <div><span class="sc-badge bid-b">BID</span><div style="font-size:.75rem;color:var(--t2);margin-top:4px">BIDV</div></div>
+        <div class="sc-rank"><span class="rank r3">3</span><span style="font-size:.6875rem;color:var(--bid);font-weight:700;margin-left:4px">ƯU TIÊN #3</span></div>
+      </div>
+      <div class="sc-overall" style="color:var(--bid)">74</div>
+      <div class="sc-label mono">/ 100 điểm tổng hợp</div>
+      <div class="sc-items">
+        <div class="si"><span class="si-l">Chất lượng TS (LLCR ↓)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:62%;background:var(--bid)"></div></div><span class="si-v" style="color:var(--bid)">62</span></div></div>
+        <div class="si"><span class="si-l">Sinh lời (NIM thấp nhất)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:68%;background:var(--bid)"></div></div><span class="si-v" style="color:var(--bid)">68</span></div></div>
+        <div class="si"><span class="si-l">Tăng trưởng (tín dụng #2)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:85%;background:var(--bid)"></div></div><span class="si-v" style="color:var(--bid)">85</span></div></div>
+        <div class="si"><span class="si-l">Định giá (P/B 1,67× thấp)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:82%;background:var(--bid)"></div></div><span class="si-v" style="color:var(--bid)">82</span></div></div>
+        <div class="si"><span class="si-l">Catalyst (Tăng vốn + ĐTC)</span><div class="bar-row"><div class="mini-bar"><div class="mini-fill" style="width:78%;background:var(--bid)"></div></div><span class="si-v" style="color:var(--bid)">78</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RADAR CHART + RANKING TABLE -->
+  <div class="ch2 rv">
+    <div class="ccard">
+      <div class="cc-ey mono">Multi-Dimensional Analysis</div>
+      <div class="cc-h">Radar Chart — So sánh 5 chiều</div>
+      <div class="leg"><div class="li"><div class="ld" style="background:var(--vcb)"></div>VCB</div><div class="li"><div class="ld" style="background:var(--ctg)"></div>CTG</div><div class="li"><div class="ld" style="background:var(--bid)"></div>BID</div></div>
+      <div style="position:relative;height:260px"><canvas id="radarChart"></canvas></div>
+    </div>
+    <div class="ccard">
+      <div class="cc-ey mono">Valuation Summary</div>
+      <div class="cc-h">Upside tiềm năng 12–18 tháng</div>
+      <div style="position:relative;height:260px"><canvas id="upsideChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- FINAL RANKING TABLE -->
+  <div class="rank-table rv">
+    <div class="rt-row header">
+      <div class="rt-th mono">Hạng</div>
+      <div class="rt-th mono">Ngân hàng & Luận điểm</div>
+      <div class="rt-th mono" style="text-align:right">Điểm / Upside</div>
+    </div>
+    <div class="rt-row">
+      <div><span class="rank r1">1</span></div>
+      <div class="rt-bank">
+        <span class="rt-badge ctg-b">CTG</span>
+        <div><div class="rt-name">VietinBank — GIA TĂNG TỶ TRỌNG (DCA)</div><div class="rt-sub">P/E 8× rẻ nhất · ROE 21,25% cao nhất · Dự phòng giảm catalyst · Tín dụng 17% · Vùng 33–37k</div></div>
+      </div>
+      <div class="rt-score-wrap"><div class="rt-score" style="color:var(--ctg)">87</div><span class="rt-tag ctg-b">+25–46%</span></div>
+    </div>
+    <div class="rt-row">
+      <div><span class="rank r2">2</span></div>
+      <div class="rt-bank">
+        <span class="rt-badge vcb-b">VCB</span>
+        <div><div class="rt-name">Vietcombank — QUAN SÁT + MUA PHÂN KỲ (DCA)</div><div class="rt-sub">LLCR #1 · ROA #1 · NIM #1 · Mizuho catalyst · VIFC · Chờ trigger deal · Vùng 50–57k</div></div>
+      </div>
+      <div class="rt-score-wrap"><div class="rt-score" style="color:var(--vcb)">82</div><span class="rt-tag vcb-b">+19–44%</span></div>
+    </div>
+    <div class="rt-row">
+      <div><span class="rank r3">3</span></div>
+      <div class="rt-bank">
+        <span class="rt-badge bid-b">BID</span>
+        <div><div class="rt-name">BIDV — GIA TĂNG TỶ TRỌNG (Dài hạn 3–5 năm)</div><div class="rt-sub">P/B 1,67× dưới lịch sử · Tăng vốn 99k tỷ · Đầu tư công moat · NIM cải thiện catalyst · Vùng 36–40k</div></div>
+      </div>
+      <div class="rt-score-wrap"><div class="rt-score" style="color:var(--bid)">74</div><span class="rt-tag bid-b">+17–54%</span></div>
+    </div>
+  </div>
+
+  <!-- CTA 3 BANKS -->
+  <div class="cta-grid rv">
+    <div class="cta-c ctg">
+      <span class="cta-badge ctg-b">CTG · #1 ƯU TIÊN</span>
+      <div class="cta-title">GIA TĂNG TỶ TRỌNG</div>
+      <span class="cta-verdict ctg-b">DCA 33.000–37.000đ · Stop 30k</span>
+      <div class="cta-items">
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Lý do mua:</strong> P/E 8× cực rẻ cho ROE 21,25% — thấp nhất Big 3</div></div>
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Trigger mua thêm:</strong> LNTT Q2/2026 ≥ 11.000 tỷ</div></div>
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Chốt lời một phần:</strong> Vượt 46.000đ (P/E 9,3×)</div></div>
+      </div>
+    </div>
+    <div class="cta-c vcb">
+      <span class="cta-badge vcb-b">VCB · #2 ƯU TIÊN</span>
+      <div class="cta-title">QUAN SÁT + DCA</div>
+      <span class="cta-verdict vcb-b">DCA 50.000–57.000đ · Stop 47k</span>
+      <div class="cta-items">
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Lý do mua:</strong> Chất lượng TS #1 · Moat CASA · Dividend ~4,4%</div></div>
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Trigger mua thêm:</strong> Mizuho chốt 6,5% vốn</div></div>
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Chốt lời một phần:</strong> Vượt 75.000đ (P/B 2,5×)</div></div>
+      </div>
+    </div>
+    <div class="cta-c bid">
+      <span class="cta-badge bid-b">BID · #3 ƯU TIÊN</span>
+      <div class="cta-title">GIA TĂNG (Dài hạn)</div>
+      <span class="cta-verdict bid-b">DCA 36.000–40.000đ · Stop 33k</span>
+      <div class="cta-items">
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Lý do mua:</strong> P/B 1,67× dưới lịch sử · ĐTC moat không thể thay thế</div></div>
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Trigger mua thêm:</strong> Tăng vốn 99.000 tỷ hoàn thành</div></div>
+        <div class="cta-item"><div class="cta-dot"></div><div><strong>Chốt lời một phần:</strong> Vượt 50.000đ (P/B 2,2×)</div></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div>
+      <div class="ft-brand">So sánh đầu tư VCB · CTG · BID 2026</div>
+      <div class="ft-sub">Dữ liệu BCTC kiểm toán 2023–2025 · Giá 24/04/2026 · ĐHĐCĐ 24/04/2026</div>
+    </div>
+    <div style="font-size:11px;color:var(--t3)">Phân tích độc lập · Không phải tư vấn đầu tư</div>
+  </div>
+  <div class="w"><p class="ft-disc">Báo cáo tổng hợp từ BCTC kiểm toán Big 4 (E&Y/Deloitte/PwC VN), ĐHĐCĐ 24/04/2026, VnExpress, CafeF, Vietstock, Fireant, 24HMoney, SimplyWallSt, Vietcap Research. Chỉ mang tính tham khảo — <strong style="color:var(--t1)">KHÔNG PHẢI tư vấn đầu tư chính thức</strong>. Đầu tư có rủi ro. Dự phóng có thể không chính xác.</p></div>
+</footer>
+
+<script>
+// ══ CHART CONFIG ══
+const grd='rgba(255,255,255,.03)',tc='#323D52';
+const lbs=['2023','2024','2025'];
+const opts=(extra={})=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:{size:10}},grid:{color:grd}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}},...extra});
+
+// NPL Chart
+new Chart(document.getElementById('nplChart'),{type:'line',data:{labels:lbs,datasets:[
+  {label:'VCB',data:[0.97,0.96,0.98],borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.06)',tension:.4,fill:true,pointRadius:4,borderWidth:2},
+  {label:'CTG',data:[1.3,1.45,1.1],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,.06)',tension:.4,fill:true,pointRadius:4,borderWidth:2,borderDash:[4,2]},
+  {label:'BID',data:[1.3,1.41,1.2],borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.06)',tension:.4,fill:true,pointRadius:4,borderWidth:2,borderDash:[2,2]}
+]},options:opts({scales:{y:{min:0.5,max:2.0,ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{color:grd}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}})});
+
+// Coverage Chart
+new Chart(document.getElementById('covChart'),{type:'bar',data:{labels:['VCB','CTG','BID'],datasets:[
+  {data:[202,158.8,112],backgroundColor:['rgba(16,185,129,.7)','rgba(59,130,246,.7)','rgba(239,68,68,.7)'],borderRadius:6}
+]},options:opts({scales:{y:{min:80,ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{color:grd}},x:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}})});
+
+// CAR Chart
+new Chart(document.getElementById('carChart'),{type:'bar',data:{labels:['2024','2026E'],datasets:[
+  {label:'VCB',data:[11.5,12],backgroundColor:'rgba(16,185,129,.7)',borderRadius:4},
+  {label:'CTG',data:[9.5,10.5],backgroundColor:'rgba(59,130,246,.7)',borderRadius:4},
+  {label:'BID',data:[8.6,9.5],backgroundColor:'rgba(239,68,68,.7)',borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}},display:true}},scales:{y:{min:7,ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{color:grd}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}}});
+
+// ROE Chart
+new Chart(document.getElementById('roeChart'),{type:'line',data:{labels:lbs,datasets:[
+  {label:'VCB ROE',data:[22,18.7,16.5],borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.06)',tension:.4,fill:true,pointRadius:4,borderWidth:2},
+  {label:'CTG ROE',data:[16,17.9,21.25],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,.06)',tension:.4,fill:true,pointRadius:4,borderWidth:2,borderDash:[4,2]},
+  {label:'BID ROE',data:[18,19.17,19.02],borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.06)',tension:.4,fill:true,pointRadius:4,borderWidth:2,borderDash:[2,2]}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}},display:true}},scales:{y:{min:10,max:25,ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{color:grd}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}}});
+
+// NIM Chart
+new Chart(document.getElementById('nimChart'),{type:'line',data:{labels:lbs,datasets:[
+  {label:'VCB',data:[3.0,2.86,2.85],borderColor:'#10B981',tension:.4,pointRadius:4,borderWidth:2.5},
+  {label:'CTG',data:[2.8,2.57,2.59],borderColor:'#3B82F6',tension:.4,pointRadius:4,borderWidth:2.5,borderDash:[4,2]},
+  {label:'BID',data:[2.5,2.33,2.4],borderColor:'#EF4444',tension:.4,pointRadius:4,borderWidth:2.5,borderDash:[2,2]}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}},display:true}},scales:{y:{min:1.5,max:3.5,ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{color:grd}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}}});
+
+// Credit growth chart
+new Chart(document.getElementById('creditChart'),{type:'bar',data:{labels:['VCB','CTG','BID'],datasets:[
+  {label:'2025',data:[15,15.7,15.2],backgroundColor:['rgba(16,185,129,.4)','rgba(59,130,246,.4)','rgba(239,68,68,.4)'],borderRadius:4},
+  {label:'2026E',data:[10,17,15.5],backgroundColor:['rgba(16,185,129,.8)','rgba(59,130,246,.8)','rgba(239,68,68,.8)'],borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}},display:true}},scales:{y:{ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{color:grd}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}}});
+
+// CASA Chart
+new Chart(document.getElementById('casaChart'),{type:'line',data:{labels:lbs,datasets:[
+  {label:'VCB',data:[34.7,36.72,35.42],borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.07)',tension:.4,fill:true,pointRadius:4,borderWidth:2},
+  {label:'CTG',data:[24,24.8,25.5],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,.07)',tension:.4,fill:true,pointRadius:4,borderWidth:2,borderDash:[4,2]},
+  {label:'BID',data:[15,15.8,17],borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.07)',tension:.4,fill:true,pointRadius:4,borderWidth:2,borderDash:[2,2]}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}},display:true}},scales:{y:{min:10,max:42,ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{color:grd}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}}});
+
+// Profit Chart
+new Chart(document.getElementById('profitChart'),{type:'bar',data:{labels:lbs,datasets:[
+  {label:'VCB',data:[42.36,42.28,44.02],backgroundColor:['rgba(16,185,129,.3)','rgba(16,185,129,.5)','#10B981'],borderRadius:4},
+  {label:'CTG',data:[23,31.7,43.4],backgroundColor:['rgba(59,130,246,.3)','rgba(59,130,246,.5)','#3B82F6'],borderRadius:4},
+  {label:'BID',data:[27,32.08,36.1],backgroundColor:['rgba(239,68,68,.3)','rgba(239,68,68,.5)','#EF4444'],borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}},display:true}},scales:{y:{ticks:{color:tc,font:{size:10},callback:v=>v+'k'},grid:{color:grd}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}}});
+
+// RADAR CHART
+const radarDef={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}},scales:{r:{angleLines:{color:grd},grid:{color:grd},pointLabels:{color:tc,font:{size:10}},ticks:{display:false},min:0,max:100}}};
+new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:['Chất lượng TS','Sinh lời','Tăng trưởng','Định giá','Catalyst'],datasets:[
+  {label:'VCB',data:[98,88,60,70,85],borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.12)',pointBackgroundColor:'#10B981',borderWidth:2},
+  {label:'CTG',data:[80,95,92,98,90],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,.12)',pointBackgroundColor:'#3B82F6',borderWidth:2},
+  {label:'BID',data:[62,68,85,82,78],borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.12)',pointBackgroundColor:'#EF4444',borderWidth:2}
+]},options:radarDef});
+
+// UPSIDE CHART
+new Chart(document.getElementById('upsideChart'),{type:'bar',data:{labels:['VCB','CTG','BID'],datasets:[
+  {label:'Upside cơ sở (%)',data:[19,25,17],backgroundColor:['rgba(16,185,129,.5)','rgba(59,130,246,.5)','rgba(239,68,68,.5)'],borderRadius:4},
+  {label:'Upside bull case (%)',data:[44,46,54],backgroundColor:['rgba(16,185,129,.9)','rgba(59,130,246,.9)','rgba(239,68,68,.9)'],borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{labels:{color:tc,font:{size:10}},display:true}},scales:{x:{ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{color:grd}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+
+// ══ REVEAL ══
+const io=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('vis'),i*55)});
+},{threshold:.05});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+// ══ NAV ACTIVE ══
+const secs=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.nlinks a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id});links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+c))},{passive:true});
+</script>
+</body>
+</html>

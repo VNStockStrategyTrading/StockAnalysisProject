@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KBC · Kinh Bắc — Investment Thesis 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --bg0:#07080F;--bg1:#0D0F1C;--bg2:#121526;--bg3:#181C33;--bg4:#1E2440;--bg5:#25304F;
+  --bdr0:rgba(255,255,255,.04);--bdr1:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.14);
+  --t0:#ECF0FF;--t1:#8892BB;--t2:#505A82;--t3:#303858;
+  --v:#7C3AED;--vL:rgba(124,58,237,.12);--vB:rgba(124,58,237,.28);
+  --p:#A78BFA;--pL:rgba(167,139,250,.10);--pB:rgba(167,139,250,.22);
+  --or:#EA580C;--orL:rgba(234,88,12,.12);--orB:rgba(234,88,12,.26);
+  --sky:#38BDF8;--skyL:rgba(56,189,248,.09);--skyB:rgba(56,189,248,.20);
+  --jade:#10B981;--jadeL:rgba(16,185,129,.09);--jadB:rgba(16,185,129,.20);
+  --rose:#F43F5E;--roseL:rgba(244,63,94,.10);--roseB:rgba(244,63,94,.22);
+  --gold:#F59E0B;--goldL:rgba(245,158,11,.10);--goldB:rgba(245,158,11,.24);
+  --r:10px;--rl:16px;--rx:22px;--sh:0 8px 40px rgba(0,0,0,.55);--tr:all .18s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--bg0);color:var(--t0);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--v);border-radius:2px}
+.cond{font-family:'Barlow Condensed',sans-serif}
+.mono{font-family:'JetBrains Mono',monospace}
+.nav{position:sticky;top:0;z-index:300;background:rgba(7,8,15,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr0);height:56px;display:flex;align-items:center}
+.nv{max-width:1380px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;width:100%}
+.nbrand{display:flex;align-items:center;gap:10px}
+.nbadge{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;letter-spacing:.06em;padding:4px 10px;border-radius:5px;background:linear-gradient(135deg,var(--v),#5B21B6);color:#fff}
+.ntitle{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:.04em;color:var(--t0)}
+.nsub{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--t3);margin-top:1px}
+.nlinks{display:flex;gap:2px;list-style:none}
+.nlinks a{font-size:11px;font-weight:600;color:var(--t2);text-decoration:none;padding:5px 11px;border-radius:6px;transition:var(--tr);letter-spacing:.06em;text-transform:uppercase}
+.nlinks a:hover,.nlinks a.on{color:var(--t0);background:var(--bg3)}
+.ncta{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:.06em;background:linear-gradient(135deg,var(--v),#5B21B6);color:#fff;padding:7px 17px;border-radius:8px;text-decoration:none;transition:var(--tr)}
+.ncta:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px}
+.ham span{width:20px;height:1.5px;background:var(--t2);border-radius:1px;display:block}
+.w{max-width:1380px;margin:0 auto;padding:0 2rem}
+section{padding:60px 0}
+hr.div{border:none;border-top:1px solid var(--bdr0);margin:0}
+.seye{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.seyebar{width:20px;height:2px;background:linear-gradient(90deg,var(--v),var(--p))}
+.seye-t{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--p);letter-spacing:.18em;text-transform:uppercase}
+.sec-h{font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.5rem,2.8vw,2.125rem);font-weight:800;letter-spacing:.02em;color:var(--t0);margin-bottom:8px;line-height:1.1}
+.sec-p{font-size:.875rem;color:var(--t1);line-height:1.65;max-width:580px}
+.shd{margin-bottom:36px}
+.hero{position:relative;padding:68px 0 60px;background:radial-gradient(ellipse 60% 60% at 90% 10%,rgba(124,58,237,.1) 0%,transparent 55%),radial-gradient(ellipse 40% 50% at 5% 90%,rgba(234,88,12,.07) 0%,transparent 55%),var(--bg1);border-bottom:1px solid var(--bdr0);overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 32 L32 0 L64 32 L32 64 Z' fill='none' stroke='%23ffffff' stroke-width='.5' stroke-opacity='0.018'/%3E%3C/svg%3E");pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 420px;gap:56px;align-items:start}
+.heyebrow{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.hline{width:28px;height:2px;background:linear-gradient(90deg,var(--v),var(--p))}
+.heytxt{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--p);letter-spacing:.18em;text-transform:uppercase}
+.hh{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:900;letter-spacing:.01em;line-height:1.0;color:var(--t0);margin-bottom:14px}
+.hh .v{color:var(--p)}.hh .o{color:var(--or)}
+.hp{font-size:.9375rem;color:var(--t1);line-height:1.72;max-width:530px;font-weight:400;margin-bottom:28px}
+.htags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:32px}
+.htag{font-size:10px;font-weight:600;color:var(--t1);background:var(--bg3);padding:4px 10px;border-radius:20px;border:1px solid var(--bdr1);letter-spacing:.03em}
+.htag.v{background:var(--vL);color:var(--p);border-color:var(--vB)}
+.htag.o{background:var(--orL);color:var(--or);border-color:var(--orB)}
+.hbtns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-v{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:.04em;background:linear-gradient(135deg,var(--v),#5B21B6);color:#fff;padding:11px 26px;border-radius:var(--r);text-decoration:none;transition:var(--tr)}
+.btn-v:hover{filter:brightness(1.15);transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,58,237,.4)}
+.btn-g{font-size:13px;font-weight:500;background:var(--bg3);color:var(--t0);padding:11px 22px;border-radius:var(--r);text-decoration:none;border:1px solid var(--bdr2);transition:var(--tr)}
+.btn-g:hover{background:var(--bg4)}
+.kpc{background:var(--bg2);border:1px solid var(--bdr2);border-top:2px solid var(--v);border-radius:var(--rx);padding:22px;box-shadow:var(--sh)}
+.kpc-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--bdr0)}
+.kpc-l{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--t3);letter-spacing:.16em;text-transform:uppercase}
+.kpc-badge{font-family:'JetBrains Mono',monospace;font-size:8.5px;background:var(--vL);color:var(--p);padding:3px 8px;border-radius:4px;border:1px solid var(--vB)}
+.kgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.kk{background:var(--bg3);border-radius:var(--r);padding:13px 15px;transition:var(--tr);cursor:default}
+.kk:hover{background:var(--bg4)}.kk.full{grid-column:1/-1}
+.kk-l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.kk-v{font-family:'Barlow Condensed',sans-serif;font-size:1.8rem;font-weight:900;letter-spacing:.02em;line-height:1}
+.kk-v.v{color:var(--p)}.kk-v.o{color:var(--or)}.kk-v.j{color:var(--jade)}.kk-v.s{color:var(--sky)}.kk-v.g{color:var(--gold)}
+.kk-n{font-size:10px;color:var(--t3);margin-top:3px;line-height:1.3}
+.astrip{background:linear-gradient(90deg,var(--vL),rgba(124,58,237,.05));border-top:1px solid var(--vB);border-bottom:1px solid var(--vB);padding:13px 0}
+.asi{max-width:1380px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.as-v{display:flex;align-items:center;gap:12px}
+.asbadge{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.06em;background:var(--vL);color:var(--p);padding:5px 12px;border-radius:6px;border:1px solid var(--vB)}
+.as-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:.02em;color:var(--t0)}
+.as-sub{font-size:11.5px;color:var(--t2);margin-top:1px}
+.as-nums{display:flex;gap:28px}
+.asn{text-align:center}
+.asn-v{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--p)}
+.asn-l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.sbox{background:var(--bg2);border:1px solid var(--bdr1);border-left:3px solid var(--v);border-radius:0 var(--rl) var(--rl) 0;padding:22px 26px;margin-bottom:36px;position:relative;overflow:hidden}
+.sbox::before{content:'';position:absolute;right:-20px;top:-20px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,var(--vL) 0%,transparent 70%);pointer-events:none}
+.sbox p{font-size:1rem;color:var(--t0);line-height:1.78;font-weight:400}
+.sbox strong{color:var(--p);font-weight:700}.sbox em{color:var(--or);font-style:normal;font-weight:700}
+.ptrio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:36px}
+.ptile{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:20px;transition:var(--tr);position:relative;overflow:hidden}
+.ptile::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--v),var(--p));transform:scaleX(0);transform-origin:left;transition:transform .28s ease}
+.ptile:hover{background:var(--bg3);border-color:var(--bdr2)}.ptile:hover::before{transform:scaleX(1)}
+.pt-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.pt-val{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:.02em;color:var(--t0);margin-bottom:6px}
+.pt-note{font-size:.75rem;color:var(--t1);line-height:1.45}
+.cats{display:flex;flex-direction:column;gap:10px}
+.cat{display:grid;grid-template-columns:58px 1fr;gap:16px;align-items:start;background:var(--bg2);border:1px solid var(--bdr0);border-radius:var(--rl);padding:18px 20px;transition:var(--tr);position:relative;overflow:hidden;cursor:default}
+.cat::after{content:'';position:absolute;top:0;right:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--v),var(--p));opacity:0;transition:opacity .25s}
+.cat:hover{background:var(--bg3);border-color:var(--bdr2)}.cat:hover::after{opacity:1}
+.cnum{width:54px;height:54px;border-radius:10px;background:var(--vL);border:1px solid var(--vB);color:var(--p);font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ctitle{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.02em;color:var(--t0);margin-bottom:5px;line-height:1.25}
+.cdesc{font-size:.78125rem;color:var(--t1);line-height:1.58}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;padding:2px 8px;border-radius:20px;border:1px solid}
+.tv{background:var(--vL);color:var(--p);border-color:var(--vB)}
+.to{background:var(--orL);color:var(--or);border-color:var(--orB)}
+.tj{background:var(--jadeL);color:var(--jade);border-color:var(--jadB)}
+.ts{background:var(--skyL);color:var(--sky);border-color:var(--skyB)}
+.tr2{background:var(--roseL);color:var(--rose);border-color:var(--roseB)}
+.tp{background:var(--pL);color:var(--p);border-color:var(--pB)}
+.tg{background:var(--goldL);color:var(--gold);border-color:var(--goldB)}
+.mbento{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mc{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:20px;transition:var(--tr)}
+.mc:hover{background:var(--bg3);border-color:var(--vB)}
+.mc.w2{grid-column:span 2}
+.mc-icon{width:42px;height:42px;border-radius:10px;background:var(--vL);border:1px solid var(--vB);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.mc-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.02em;color:var(--t0);margin-bottom:5px}
+.mc-desc{font-size:.75rem;color:var(--t1);line-height:1.55}
+.mc-stat{font-family:'Barlow Condensed',sans-serif;font-size:1.75rem;font-weight:900;color:var(--p);margin-top:8px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.ga{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:16px;text-align:center;transition:var(--tr)}
+.ga:hover{background:var(--bg3);border-color:var(--vB)}
+.ga-v{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;letter-spacing:.02em;margin-bottom:4px}
+.ga-l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.ga-n{font-size:10px;color:var(--t3);margin-top:3px;line-height:1.3}
+.ch2{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-bottom:14px}
+.ccard{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:22px;box-shadow:var(--sh)}
+.cc-ey{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.cc-h{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.02em;color:var(--t0);margin-bottom:14px}
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
+.li{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--t1)}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.epsc{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:26px;margin-bottom:14px}
+.eps-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+.eps-tt{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.02em;color:var(--t0)}
+.eps-cagr{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--jadeL);color:var(--jade);padding:4px 10px;border-radius:6px;border:1px solid var(--jadB)}
+.eps-tl{display:grid;grid-template-columns:repeat(6,1fr);position:relative;padding:10px 0}
+.eps-tl::before{content:'';position:absolute;top:22px;left:8.33%;right:8.33%;height:1px;background:var(--bdr2);z-index:0}
+.eps-node{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+.eps-dot{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--bg0);margin-bottom:12px;flex-shrink:0}
+.dn{background:var(--t3)}.dr{background:var(--sky);box-shadow:0 0 0 4px var(--skyL)}.dk{background:var(--rose);box-shadow:0 0 0 4px var(--roseL)}.dp{background:var(--p);box-shadow:0 0 0 6px var(--pL);animation:vpulse 2.2s infinite}.df{background:var(--or);box-shadow:0 0 0 4px var(--orL)}.dg{background:var(--jade);box-shadow:0 0 0 4px var(--jadeL)}
+@keyframes vpulse{0%,100%{box-shadow:0 0 0 6px var(--pL)}50%{box-shadow:0 0 0 10px rgba(167,139,250,.04)}}
+.eps-v{font-family:'JetBrains Mono',monospace;font-size:.8125rem;font-weight:700;color:var(--t0);margin-bottom:2px}
+.eps-yr{font-family:'JetBrains Mono',monospace;font-size:.625rem;color:var(--t3)}
+.eps-lbl{font-size:.5625rem;color:var(--t3);margin-top:2px;text-align:center;line-height:1.3}
+.eps-note{margin-top:18px;padding:12px 16px;background:var(--orL);border:1px solid var(--orB);border-radius:var(--r);font-size:.78125rem;color:var(--or);line-height:1.55}
+.eps-leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;padding-top:14px;border-top:1px solid var(--bdr0)}
+.eli{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--t1)}
+.eli-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.mtw{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.mt-hd{padding:16px 20px 12px;border-bottom:1px solid var(--bdr0)}
+.mt{width:100%;border-collapse:collapse;font-size:.8125rem}
+.mt thead tr{background:rgba(255,255,255,.02)}
+.mt thead th{padding:10px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase}
+.mt tbody tr{border-bottom:1px solid var(--bdr0);transition:background .12s}
+.mt tbody tr:hover{background:rgba(255,255,255,.015)}.mt tbody tr:last-child{border-bottom:none}
+.mt td{padding:10px 16px;color:var(--t1);vertical-align:top;line-height:1.45}
+.mt td.v{color:var(--t0);font-weight:700;font-family:'JetBrains Mono',monospace;font-size:.75rem}
+.mt td.pos{color:var(--jade);font-weight:700;font-family:'JetBrains Mono',monospace}
+.mt td.vio{color:var(--p);font-weight:700;font-family:'JetBrains Mono',monospace}
+.mt td.warn{color:var(--or);font-weight:700;font-family:'JetBrains Mono',monospace}
+.mt td.neg{color:var(--rose);font-weight:700;font-family:'JetBrains Mono',monospace}
+.plang{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.plc{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:18px;transition:var(--tr)}
+.plc:hover{background:var(--bg3);border-color:var(--bdr2)}
+.plc.hi{border-color:var(--vB);background:var(--vL)}
+.plc.hi .plv{color:var(--p)}
+.pll{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
+.plv{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;letter-spacing:.02em;color:var(--t0);margin-bottom:4px}
+.pld{font-size:.6875rem;font-weight:700;color:var(--jade)}
+.pld.o{color:var(--or)}.pld.v{color:var(--p)}.pld.n{color:var(--t3)}
+.pln{font-size:.6875rem;color:var(--t2);margin-top:4px;line-height:1.35}
+.prc{background:var(--bg2);border:1px solid var(--bdr2);border-top:2px solid var(--v);border-radius:var(--rl);padding:24px;margin-bottom:14px}
+.pc-top{display:flex;justify-content:space-between;margin-bottom:22px}
+.pc-l{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;letter-spacing:.02em;color:var(--t0)}
+.pc-d{font-family:'JetBrains Mono',monospace;font-size:.6875rem;color:var(--t3)}
+.pbar-w{padding:0 2%}
+.pbar{position:relative;height:8px;background:var(--bg5);border-radius:4px;margin-bottom:10px}
+.pfill{position:absolute;left:0;height:100%;background:linear-gradient(90deg,var(--v),var(--p));border-radius:4px;width:28%}
+.pdot{position:absolute;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;border:2.5px solid var(--bg0)}
+.pd-cur{background:var(--sky);left:calc(28% - 7px)}.pd-tgt{background:var(--jade);right:-7px}
+.plbls{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3)}
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.ps{background:var(--bg3);border-radius:var(--r);padding:12px;text-align:center}
+.ps-v{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:.02em}
+.ps-l{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.scc{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:22px;margin-bottom:14px}
+.togr{display:flex;gap:0;background:var(--bg3);border-radius:8px;padding:3px;width:fit-content;margin-bottom:16px}
+.tog{padding:6px 18px;border-radius:6px;font-size:12px;font-weight:700;border:none;background:transparent;color:var(--t2);cursor:pointer;transition:var(--tr);font-family:'Barlow',sans-serif}
+.tog.on{background:var(--bg2);color:var(--t0)}
+.scdata{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.scd{border-radius:var(--r);padding:14px;text-align:center}
+.scd-v{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:900;letter-spacing:.02em;margin-bottom:3px}
+.scd-l{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.04em}
+.vcg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.vc{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:16px;text-align:center;transition:var(--tr)}
+.vc:hover{border-color:var(--vB);transform:translateY(-2px);box-shadow:var(--sh)}
+.vc.star{border-color:var(--vB);background:var(--vL)}
+.vc-m{font-size:.6875rem;color:var(--t2);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;line-height:1.35}
+.vc-p{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;letter-spacing:.02em;color:var(--t0);margin-bottom:4px}
+.vc-u{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;color:var(--jade)}
+.vc-b{font-size:.625rem;color:var(--t3);margin-top:4px}
+.rlist{display:flex;flex-direction:column;gap:10px}
+.ri{background:var(--bg2);border:1px solid var(--bdr0);border-radius:var(--r);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;transition:var(--tr)}
+.ri:hover{background:var(--bg3)}
+.rb{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:20px}
+.rm{background:var(--orL);color:var(--or);border:1px solid var(--orB)}
+.rh{background:var(--roseL);color:var(--rose);border:1px solid var(--roseB)}
+.rl2{background:var(--jadeL);color:var(--jade);border:1px solid var(--jadB)}
+.ri-t{font-family:'Barlow Condensed',sans-serif;font-size:.9375rem;font-weight:800;letter-spacing:.02em;color:var(--t0);margin-bottom:2px}
+.ri-d{font-size:.75rem;color:var(--t1);line-height:1.5}
+.abox{background:linear-gradient(135deg,rgba(16,185,129,.07),rgba(16,185,129,.03)),var(--bg2);border:1px solid var(--jadB);border-radius:var(--rl);padding:28px;margin-bottom:14px}
+.ab-hd{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.ab-icon{width:44px;height:44px;border-radius:50%;background:var(--jadeL);border:1px solid var(--jadB);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ab-t{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:.02em;color:var(--jade)}
+.ab-s{font-size:.8125rem;color:rgba(16,185,129,.75)}
+.ab-body{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ai{display:flex;gap:8px;align-items:flex-start}
+.ai-dot{width:5px;height:5px;border-radius:50%;background:var(--jade);flex-shrink:0;margin-top:6px}
+.ai-t{font-size:.8125rem;color:rgba(16,185,129,.85);line-height:1.5}
+.ai-t strong{color:#A7F3D0;font-weight:700}
+.sigr{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.sig{background:var(--bg2);border:1px solid var(--bdr1);border-radius:var(--rl);padding:16px 18px}
+.sig-v{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;letter-spacing:.02em;margin-bottom:4px}
+.sig-l{font-size:.6875rem;color:var(--t2);line-height:1.45}
+.sig-l span{color:var(--t3)}
+footer{background:var(--bg1);border-top:1px solid var(--bdr0);padding:28px 0 20px;margin-top:48px}
+.ft{max-width:1380px;margin:0 auto;padding:0 2rem}
+.ftt{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--bdr0)}
+.ft-brand{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;letter-spacing:.04em;color:var(--t0)}
+.ft-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3);margin-top:2px}
+.ft-disc{font-size:.6875rem;color:var(--t3);line-height:1.7;padding-top:16px}
+.rv{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.rv.vis{opacity:1;transform:none}
+@media(max-width:1100px){.hero-grid{grid-template-columns:1fr;gap:32px}.kpc{max-width:480px}}
+@media(max-width:900px){.ch2{grid-template-columns:1fr}.mbento{grid-template-columns:1fr 1fr}.mc.w2{grid-column:auto}.vcg{grid-template-columns:1fr 1fr}.plang{grid-template-columns:1fr 1fr}.sigr{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){section{padding:44px 0}.hero{padding:44px 0 36px}.ptrio,.mbento,.plang,.sigr,.ab-body{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}.eps-tl{grid-template-columns:repeat(3,1fr)}.eps-tl::before{display:none}.as-nums{display:none}.nlinks,.ncta{display:none}.ham{display:flex}.kgrid{grid-template-columns:1fr 1fr}.vcg{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.kgrid,.vcg,.ab-body{grid-template-columns:1fr}.pstats,.scdata{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nv">
+    <div class="nbrand"><span class="nbadge">KBC</span><div><div class="ntitle">KINH BẮC CITY</div><div class="nsub mono">HOSE · KCN + KĐT · Quỹ đất 5.215ha</div></div></div>
+    <ul class="nlinks" id="nl"><li><a href="#thesis">Thesis</a></li><li><a href="#catalyst">Catalyst</a></li><li><a href="#moat">Moat</a></li><li><a href="#financials">Financials</a></li><li><a href="#valuation">Valuation</a></li></ul>
+    <a href="#valuation" class="ncta">Kết luận →</a>
+    <div class="ham" id="ham"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="hero">
+  <div class="w">
+    <div class="hero-grid">
+      <div>
+        <div class="heyebrow"><div class="hline"></div><span class="heytxt mono">Phân tích đầu tư độc lập · 25/04/2026</span></div>
+        <h1 class="hh">Đế chế<br><span class="v">KCN miền Bắc</span><br>đang<span class="o"> nổ tung.</span></h1>
+        <p class="hp">Kinh Bắc — chủ sở hữu quỹ đất KCN + KĐT 5.215ha — vừa ghi nhận doanh thu 2025 tăng 141% và lãi ròng tăng 560%. Câu chuyện 2026: backlog 148ha kỷ lục + KĐT Tràng Cát mở bán + Trump International Hưng Yên. LNST 2026 dự báo tăng 80%.</p>
+        <div class="htags">
+          <span class="htag v">HOSE: KBC</span><span class="htag">KCN + KĐT tích hợp</span>
+          <span class="htag o">Trump International HY</span><span class="htag">Kiểm toán E&Y</span>
+          <span class="htag">LG · Foxconn · Goertek</span><span class="htag v">Backlog 148ha → 2026</span>
+        </div>
+        <div class="hbtns"><a href="#valuation" class="btn-v">Xem định giá →</a><a href="#financials" class="btn-g">Dữ liệu tài chính</a></div>
+      </div>
+      <div>
+        <div class="kpc">
+          <div class="kpc-hd"><div class="kpc-l mono">Market Snapshot · 24/04/2026</div><div class="kpc-badge mono">HOSE: KBC</div></div>
+          <div class="kgrid">
+            <div class="kk"><div class="kk-l mono">Giá hiện tại</div><div class="kk-v s cond">~34.000<span style="font-size:.9rem;font-weight:500">đ</span></div><div class="kk-n">Vốn hóa ~32.000 tỷ</div></div>
+            <div class="kk"><div class="kk-l mono">EPS 2025</div><div class="kk-v j cond">~2.276<span style="font-size:.9rem;font-weight:500">đ</span></div><div class="kk-n">LNST 2.147 tỷ / 942 tr CP</div></div>
+            <div class="kk"><div class="kk-l mono">P/E Trailing</div><div class="kk-v g cond">~14,9<span style="font-size:.9rem;font-weight:500">×</span></div><div class="kk-n">Forward P/E 2026 chỉ ~8,3×</div></div>
+            <div class="kk"><div class="kk-l mono">LN 2026 dự báo</div><div class="kk-v v cond">+80<span style="font-size:.9rem;font-weight:500">%</span></div><div class="kk-n">~3.860 tỷ · Vietcap forecast</div></div>
+            <div class="kk full"><div class="kk-l mono">Doanh thu 2025 — Tăng 141% · Lãi ròng ×5,6</div><div class="kk-v v cond">6.687 <span style="font-size:1rem;font-weight:500">tỷ đồng</span></div><div class="kk-n">Backlog 148ha → 2026 · KĐT Tràng Cát mở bán · Trump HY wildcard</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="astrip">
+  <div class="asi">
+    <div class="as-v"><span class="asbadge">▲ GIA TĂNG TỶ TRỌNG</span><div><div class="as-title">DCA mạnh · Vùng 30.000–36.000đ · Backlog 148ha = visibility cao nhất ngành</div><div class="as-sub">Stop 26.000đ · Trigger: Tràng Cát ký HĐ sỉ + Tràng Duệ 3 bàn giao đất Q2/2026</div></div></div>
+    <div class="as-nums"><div class="asn"><div class="asn-v">+16–46%</div><div class="asn-l mono">Upside cơ sở</div></div><div class="asn"><div class="asn-v">+80%</div><div class="asn-l mono">LN 2026F</div></div><div class="asn"><div class="asn-v">20%</div><div class="asn-l mono">Div 2026</div></div></div>
+  </div>
+</div>
+<div class="w">
+<section id="thesis">
+  <div class="shd rv"><div class="seye"><div class="seyebar"></div><span class="seye-t mono">01 — Investment Thesis</span></div><h2 class="sec-h">Câu chuyện đầu tư cốt lõi</h2><p class="sec-p">Sau 2025 bùng nổ, 2026 là năm backlog chuyển hóa thành doanh thu thật — và Trump International mở bán là wildcard chưa vào giá.</p></div>
+  <div class="sbox rv"><p>Kinh Bắc sở hữu quỹ đất <strong>KCN 5.215ha + KĐT 1.177ha</strong> — backlog đã ký đạt <strong>148ha chuyển tiếp sang 2026</strong>, cao nhất lịch sử. Câu chuyện 2026: <em>backlog khổng lồ + KĐT Tràng Cát 585ha mở bán + KCN Tràng Duệ 3 bắt đầu bàn giao</em>. LNST dự báo +80%. Hơn nữa, <strong>Trump International Hưng Yên 136ha thương phẩm mở bán 2026</strong> là ẩn số khổng lồ chưa được đưa vào mô hình định giá của các CTCK.</p></div>
+  <div class="ptrio rv">
+    <div class="ptile"><div class="pt-lbl mono">Nhóm Peter Lynch</div><div class="pt-val" style="color:var(--sky)">Chu kỳ + Tăng trưởng nhanh</div><div class="pt-note">LN biến động lớn theo thời điểm bàn giao KCN. Nhưng pipeline 5 năm chưa bao giờ dày như 2026.</div></div>
+    <div class="ptile"><div class="pt-lbl mono">Giai đoạn tăng trưởng</div><div class="pt-val" style="color:var(--p)">Giữa — Tăng tốc mạnh</div><div class="pt-note">KCN mới + KĐT Tràng Cát + Trump HY: 3 engine đồng thời khởi động 2026–2028.</div></div>
+    <div class="ptile"><div class="pt-lbl mono">Dư địa mở rộng</div><div class="pt-val" style="color:var(--or)">Rất lớn (7–10 năm)</div><div class="pt-note">2.600ha sẵn sàng cho thuê. 5 KCN mới đang GPMB thêm 1.170ha. Long An FDI mới nhất.</div></div>
+  </div>
+</section>
+<hr class="div">
+<section id="catalyst">
+  <div class="shd rv"><div class="seye"><div class="seyebar"></div><span class="seye-t mono">02 — 6 Growth Catalysts 2026</span></div><h2 class="sec-h">6 Catalyst chính — Năm pipeline nổ tung</h2><p class="sec-p">Backlog kỷ lục 148ha + 2 đại dự án mở bán + 5 KCN mới: pipeline 2026 dày chưa từng có.</p></div>
+  <div class="cats">
+    <div class="cat rv"><div class="cnum cond">01</div><div><div class="ctitle cond">📦 Backlog 148ha chuyển sang 2026 — Visibility doanh thu cao nhất lịch sử</div><div class="cdesc">Tính đến cuối 2025, backlog đã ký nhưng chưa ghi nhận doanh thu đạt 148ha — cao nhất lịch sử. Đây là "đơn hàng chốt sẵn" chỉ chờ bàn giao để ghi nhận P&L. Cộng thêm MOU 30ha tại Tràng Duệ 3 với CTP Invest Ltd khởi công nhà xưởng xây sẵn trong 2026.</div><div class="tags"><span class="tag tv">Backlog 148ha</span><span class="tag tj">Ghi nhận 2026</span><span class="tag ts">Visibility kỷ lục</span></div></div></div>
+    <div class="cat rv"><div class="cnum cond">02</div><div><div class="ctitle cond">🏘️ KĐT Tràng Cát 585ha mở bán 2026 — Catalyst doanh thu khổng lồ</div><div class="cdesc">Pháp lý hoàn thiện sau khi KBC hoàn tất thanh toán tiền sử dụng đất. Kế hoạch 2026: bán sỉ 12–20ha (4.620–7.700 tỷ DT). Giá vốn đất tích lũy từ 2006 → biên LN rất cao. Mỗi 20ha/năm trong 2026–2028 mang về 7.700 tỷ DT.</div><div class="tags"><span class="tag tv">Tràng Cát 585ha</span><span class="tag to">Mở bán 2026</span><span class="tag tj">Biên LN cao</span></div></div></div>
+    <div class="cat rv"><div class="cnum cond">03</div><div><div class="ctitle cond">🏗️ KCN Tràng Duệ 3 (652ha) — Bàn giao đất từ Q2/2026</div><div class="cdesc">652,7ha Hải Phòng · 8.000 tỷ đầu tư · Thủ tướng phê duyệt 14/1/2025. Bàn giao Q2/2026 khi hoàn GPMB 200ha. MOU 30ha với CTP Invest Ltd + tiềm năng 30ha thêm trong 2026. Giá thuê premium Hải Phòng — cao hơn các KCN nội địa 20–30%.</div><div class="tags"><span class="tag tv">652ha Tràng Duệ 3</span><span class="tag ts">Q2/2026</span><span class="tag to">MOU 30ha+</span></div></div></div>
+    <div class="cat rv"><div class="cnum cond">04</div><div><div class="ctitle cond">🌟 Trump International Hưng Yên 1,5 tỷ USD — Wildcard chưa vào mô hình</div><div class="cdesc">990ha · 136ha thương phẩm · Kế hoạch mở bán 2026. Sở Xây dựng Hưng Yên cho phép bán cho người nước ngoài từ 3/2/2026. Vietcap chưa đưa vào mô hình định giá — đây là upside không phản ánh vào giá hiện tại. Chủ tịch Đặng Thành Tâm: nếu định giá lại tài sản, KBC vượt 100.000đ/CP.</div><div class="tags"><span class="tag tv">Trump Intl HY</span><span class="tag to">136ha thương phẩm</span><span class="tag tp">Wildcard 2026</span></div></div></div>
+    <div class="cat rv"><div class="cnum cond">05</div><div><div class="ctitle cond">🗺️ 5 KCN mới 1.170ha — Engine tăng trưởng 2026–2028</div><div class="cdesc">Tràng Duệ 3 (652ha, Hải Phòng) · Quế Võ MR 2 (Bắc Ninh, 1.878 tỷ) · Kim Thành 2 (Hải Dương) · Phú Bình (675ha, Thái Nguyên, 11.492 tỷ) · Lộc Giang (Long An). GPMB tiến độ cao → bàn giao 2026–2027. Mở thêm 1.170ha quỹ đất cho thuê.</div><div class="tags"><span class="tag tv">1.170ha mới</span><span class="tag tj">Bàn giao 2026–27</span><span class="tag to">Long An mới</span></div></div></div>
+    <div class="cat rv"><div class="cnum cond">06</div><div><div class="ctitle cond">💰 Cổ tức 20% tiền mặt + Tài sản ngầm khổng lồ</div><div class="cdesc">ĐHĐCĐ 2026 thông qua cổ tức 20% bằng tiền mặt từ nguồn LN chuẩn bị ghi nhận. Đồng thời huy động vốn sàn tái đầu tư GPMB. Chủ tịch Đặng Thành Tâm: định giá lại tài sản theo ngân hàng định giá → KBC có thể vượt 100.000đ/CP. Đây là "Tài sản ngầm" Peter Lynch chưa vào giá cổ phiếu.</div><div class="tags"><span class="tag tj">Div 20% tiền mặt</span><span class="tag ts">Huy động vốn sàn</span><span class="tag to">Tài sản ngầm</span></div></div></div>
+  </div>
+</section>
+<hr class="div">
+<section id="moat">
+  <div class="shd rv"><div class="seye"><div class="seyebar"></div><span class="seye-t mono">03 — Competitive Moat</span></div><h2 class="sec-h">Lợi thế cạnh tranh — 22 năm tích lũy quỹ đất</h2><p class="sec-p">Tenant LG, Foxconn, Goertek + Quỹ đất chiến lược + Mô hình KCN+KĐT tích hợp không thể sao chép.</p></div>
+  <div class="mbento rv">
+    <div class="mc"><div class="mc-icon">🏭</div><div class="mc-title cond">Quỹ đất KCN 5.215ha — 4,22% cả nước</div><div class="mc-desc">4 KCN lấp đầy 100% + 1 KCN 96,78%. Giá vốn tích lũy từ 2002 → thấp hơn thị trường 40–60%. 2.600ha sẵn sàng cho thuê, 450ha đã hoàn GPMB.</div><div class="mc-stat">5.215ha</div></div>
+    <div class="mc"><div class="mc-icon">🌏</div><div class="mc-title cond">LG · Foxconn · Goertek · Luxshare</div><div class="mc-desc">KCN Tràng Duệ: LG anchor 2013. KCN Quang Châu: Canon, Foxconn. Goertek 17ha tại NSHL (2025). Tenant chất lượng cao → giá thuê premium + uy tín thu hút FDI mới.</div></div>
+    <div class="mc"><div class="mc-icon">🏙️</div><div class="mc-title cond">KĐT tích hợp + KCN — Mô hình độc đáo VN</div><div class="mc-desc">KBC duy nhất phát triển cả KCN lẫn KĐT xung quanh — hệ sinh thái hoàn chỉnh. Biên LN KĐT cao hơn KCN 2–3 lần. Tràng Cát 585ha + KĐT Tràng Duệ 1.177ha.</div></div>
+    <div class="mc w2"><div class="mc-icon">💎</div><div class="mc-title cond">Tài sản ngầm — Giá sổ sách thấp hơn thực tế 50–70%</div><div class="mc-desc">Chủ tịch Đặng Thành Tâm tuyên bố tại ĐHĐCĐ 2026: nếu định giá lại tài sản theo ngân hàng định giá, giá KBC vượt 100.000đ/CP. Doanh nghiệp từ chối định giá lại trên giấy — chỉ ghi nhận khi bán thực. KĐT Tràng Cát 585ha (giá vốn từ 2006, nay định giá ×3–5). KCN Phú Bình 675ha vừa phê duyệt. KCN Tràng Duệ 3 652ha vừa phê duyệt. Đây là Tài sản ngầm Peter Lynch — chưa phản ánh vào giá CP. KCN Quang Châu 1.000ha — KCN lớn nhất VN.</div></div>
+  </div>
+</section>
+<hr class="div">
+<section id="financials">
+  <div class="shd rv"><div class="seye"><div class="seyebar"></div><span class="seye-t mono">04 — Financial Analysis</span></div><h2 class="sec-h">Dữ liệu tài chính BCTC kiểm toán 2025</h2><p class="sec-p">Doanh thu +141%, lãi ròng ×5,6 — tăng trưởng thực chất từ bàn giao KCN, không phải cắt chi phí.</p></div>
+  <div class="g4 rv">
+    <div class="ga"><div class="ga-v cond" style="color:var(--p)">6.687</div><div class="ga-l mono">DT thuần 2025 (tỷ)</div><div class="ga-n">+141% YoY · ×2,4 vs 2024</div></div>
+    <div class="ga"><div class="ga-v cond" style="color:var(--jade)">2.147</div><div class="ga-l mono">LNST 2025 (tỷ)</div><div class="ga-n">×5,6 vs 2024 · Kỷ lục</div></div>
+    <div class="ga"><div class="ga-v cond" style="color:var(--or)">26.955</div><div class="ga-l mono">HTK 2025 (tỷ)</div><div class="ga-n">+94% vs 2024 · GPMB KCN mới</div></div>
+    <div class="ga"><div class="ga-v cond" style="color:var(--gold)">148ha</div><div class="ga-l mono">Backlog → 2026</div><div class="ga-n">Cao nhất lịch sử KBC</div></div>
+  </div>
+  <div class="ch2 rv">
+    <div class="ccard">
+      <div class="cc-ey mono">Revenue & Profit Trend</div>
+      <div class="cc-h cond">Doanh thu & LNST 2021–2025 (tỷ đồng)</div>
+      <div class="leg"><div class="li"><div class="ld" style="background:var(--p)"></div>LNST (tỷ)</div><div class="li"><div class="ld" style="background:var(--or)"></div>Doanh thu (tỷ)</div><div class="li"><div class="ld" style="background:var(--jade);border-radius:50%"></div>Biên LNST (%)</div></div>
+      <div style="position:relative;height:215px"><canvas id="c1"></canvas></div>
+    </div>
+    <div class="ccard">
+      <div class="cc-ey mono">HTK Breakdown 2025</div>
+      <div class="cc-h cond">Cơ cấu hàng tồn kho 2025 (tỷ đồng)</div>
+      <div style="position:relative;height:215px"><canvas id="c2"></canvas></div>
+    </div>
+  </div>
+  <div class="epsc rv">
+    <div class="eps-hd"><div class="eps-tt cond">EPS Journey 2020–2026 (đ/CP)</div><div class="eps-cagr mono">Chu kỳ biến động — nhìn backlog</div></div>
+    <div class="eps-tl">
+      <div class="eps-node"><div class="eps-dot dn"></div><div class="eps-v mono" style="color:var(--t3)">~400đ</div><div class="eps-yr mono">2020</div><div class="eps-lbl">COVID</div></div>
+      <div class="eps-node"><div class="eps-dot dr"></div><div class="eps-v mono" style="color:var(--sky)">~2.100đ</div><div class="eps-yr mono">2021</div><div class="eps-lbl">Recovery</div></div>
+      <div class="eps-node"><div class="eps-dot dg"></div><div class="eps-v mono" style="color:var(--jade)">~3.900đ</div><div class="eps-yr mono">2023</div><div class="eps-lbl">Đỉnh LG</div></div>
+      <div class="eps-node"><div class="eps-dot dk"></div><div class="eps-v mono" style="color:var(--rose)">~450đ</div><div class="eps-yr mono">2024</div><div class="eps-lbl">⚠️ Đáy</div></div>
+      <div class="eps-node"><div class="eps-dot dp"></div><div class="eps-v mono" style="color:var(--p)">~2.276đ</div><div class="eps-yr mono">2025 (KT)</div><div class="eps-lbl">Recovery ★</div></div>
+      <div class="eps-node"><div class="eps-dot df"></div><div class="eps-v mono" style="color:var(--or)">~4.100đ</div><div class="eps-yr mono">2026 (F)</div><div class="eps-lbl">+80% est.</div></div>
+    </div>
+    <div class="eps-note">⚠️ <strong>EPS biến động lớn là bình thường với mô hình KCN</strong> — doanh thu ghi nhận theo từng lô bàn giao đất. Năm 2024 EPS ~450đ do GPMB chậm. Năm 2025 phục hồi ×5,6. <strong>Nhìn backlog 148ha và pipeline 5 KCN mới mới phản ánh đúng tiềm năng — không chỉ nhìn EPS từng năm.</strong></div>
+    <div class="eps-leg"><div class="eli"><div class="eli-dot" style="background:var(--t3)"></div>Đáy</div><div class="eli"><div class="eli-dot" style="background:var(--sky)"></div>Phục hồi</div><div class="eli"><div class="eli-dot" style="background:var(--jade)"></div>Đỉnh LG</div><div class="eli"><div class="eli-dot" style="background:var(--rose)"></div>Chu kỳ thấp</div><div class="eli"><div class="eli-dot" style="background:var(--p)"></div>Hiện tại (KT)</div><div class="eli"><div class="eli-dot" style="background:var(--or)"></div>Dự phóng</div></div>
+  </div>
+  <div class="mtw rv">
+    <div class="mt-hd"><div class="cc-ey mono">Key Financial Metrics</div><div class="cc-h cond" style="margin-bottom:0">Dữ liệu tài chính — BCTC kiểm toán 2025</div></div>
+    <table class="mt"><thead><tr><th>Chỉ tiêu</th><th>Giá trị</th><th>Nhận xét</th></tr></thead>
+    <tbody>
+      <tr><td>Doanh thu thuần 2025</td><td class="vio">6.687 tỷ đồng</td><td>+141% YoY · Từ bàn giao KCN + chuyển nhượng BĐS</td></tr>
+      <tr><td>LNST 2025</td><td class="vio">~2.147 tỷ</td><td>×5,6 vs 2024 · Kỷ lục lịch sử · Kiểm toán E&Y</td></tr>
+      <tr><td>EPS 2025</td><td class="v">~2.276đ/CP</td><td>~942 triệu CP lưu hành (VĐL ~9.418 tỷ)</td></tr>
+      <tr><td>P/E Trailing tại 34.000đ</td><td class="v">~14,9×</td><td>Forward P/E 2026 chỉ ~8,3× nếu LN +80%</td></tr>
+      <tr><td>HTK 2025</td><td class="warn">~26.955 tỷ</td><td>+94% vs 2024 · Do GPMB 4 KCN mới đồng thời</td></tr>
+      <tr><td>HTK tăng vs DT</td><td class="warn">Nhanh hơn DT</td><td>Bình thường với KCN đang tích lũy — HTK → DT khi bàn giao</td></tr>
+      <tr><td>Nợ vay cuối 2025</td><td class="neg">~28.600 tỷ</td><td>×2,8 vs 2024 · Vay tài trợ Tràng Cát + Trump HY</td></tr>
+      <tr><td>Nợ DH / Vốn CSH (ước)</td><td class="warn">~107%</td><td>Cao hơn 40–50% các năm trước · Chu kỳ tích lũy</td></tr>
+      <tr><td>Tiền mặt ròng</td><td class="neg">Âm (nợ DH lớn)</td><td>Đang đầu tư giai đoạn tích lũy · Bình thường</td></tr>
+      <tr><td>Cổ đông lớn</td><td class="vio">DTT 11,28% + KBC Corp 8,89%</td><td>Đặng Thành Tâm 6,79% + Quỹ PVI 5,31% + VPBankS 5%</td></tr>
+      <tr><td>NĐTNN</td><td class="pos">19,49% (max 49%)</td><td>Room ngoại còn 29,51% · 226,5 triệu CP</td></tr>
+      <tr><td>Cổ tức 2026</td><td class="pos">20% tiền mặt</td><td>ĐHĐCĐ 2026 thông qua · Yield ~6% tại 34k</td></tr>
+    </tbody></table>
+  </div>
+</section>
+<hr class="div">
+<section>
+  <div class="shd rv"><div class="seye"><div class="seyebar"></div><span class="seye-t mono">05 — Business Plan 2026</span></div><h2 class="sec-h">Kế hoạch 2026 — Năm bàn giao lớn nhất lịch sử</h2><p class="sec-p">3 nguồn DT mới kích hoạt đồng thời: KCN backlog + KĐT Tràng Cát + Trump HY.</p></div>
+  <div class="plang rv">
+    <div class="plc hi"><div class="pll mono">LNST 2026 dự báo</div><div class="plv cond">~3.860 tỷ</div><div class="pld">+80% vs 2025 · Kỷ lục</div><div class="pln">Vietcap / VPBankS dự báo · Backlog 148ha</div></div>
+    <div class="plc hi"><div class="pll mono">KĐT Tràng Cát</div><div class="plv cond">Mở bán 2026</div><div class="pld v">12–20ha sỉ · 4.620–7.700 tỷ</div><div class="pln">Pháp lý hoàn thiện · Giá vốn từ 2006</div></div>
+    <div class="plc hi"><div class="pll mono">KCN Tràng Duệ 3</div><div class="plv cond">Q2/2026</div><div class="pld">Bàn giao 30ha MOU+</div><div class="pln">652ha · 8.000 tỷ · Hải Phòng premium</div></div>
+    <div class="plc"><div class="pll mono">Trump International HY</div><div class="plv cond">Mở bán</div><div class="pld o">136ha thương phẩm</div><div class="pln">Người nước ngoài được mua từ 3/2/2026</div></div>
+    <div class="plc"><div class="pll mono">Diện tích bàn giao KCN</div><div class="plv cond">~80–100ha</div><div class="pld n">Dự báo 2026</div><div class="pln">Tràng Duệ 3 + Quế Võ MR 2 + Long An</div></div>
+    <div class="plc"><div class="pll mono">Cổ tức 2026</div><div class="plv cond">20%</div><div class="pld">~2.000đ/CP · ~6% yield</div><div class="pln">Từ nguồn thu Tràng Cát + KCN backlog</div></div>
+  </div>
+</section>
+<hr class="div">
+<section id="valuation">
+  <div class="shd rv"><div class="seye"><div class="seyebar"></div><span class="seye-t mono">06 — Valuation & Conclusion</span></div><h2 class="sec-h">Định giá & Kết luận đầu tư</h2><p class="sec-p">Forward P/E 2026 chỉ ~8,3× với LN dự báo +80% — và Trump HY chưa vào mô hình định giá.</p></div>
+  <div class="prc rv">
+    <div class="pc-top"><div class="pc-l cond">Dải giá tham chiếu (đ/CP)</div><div class="pc-d mono">25/04/2026</div></div>
+    <div class="pbar-w"><div class="pbar"><div class="pfill"></div><div class="pdot pd-cur"></div><div class="pdot pd-tgt"></div></div><div class="plbls mono"><span>26.000đ (Stop)</span><span>34.000đ (Hiện tại)</span><span>49.700đ (Bull)</span></div></div>
+    <div class="pstats"><div class="ps"><div class="ps-v cond" style="color:var(--sky)">34.000đ</div><div class="ps-l mono">Giá hiện tại</div></div><div class="ps"><div class="ps-v cond" style="color:var(--jade)">39.400đ</div><div class="ps-l mono">Target cơ sở</div></div><div class="ps"><div class="ps-v cond" style="color:var(--jade)">+16%</div><div class="ps-l mono">+ 6% div yield</div></div></div>
+  </div>
+  <div class="scc rv">
+    <div class="cc-ey mono">Scenario Analysis</div>
+    <div class="cc-h cond" style="margin-bottom:14px">Phân tích kịch bản tổng return 12–18 tháng</div>
+    <div class="togr" id="tg"><button class="tog on" data-s="b">Cơ sở</button><button class="tog" data-s="u">Tích cực</button><button class="tog" data-s="d">Thận trọng</button></div>
+    <div id="sb" class="scdata">
+      <div class="scd" style="background:var(--bg3)"><div class="scd-v cond" style="color:var(--jade)">39.400đ</div><div class="scd-l mono" style="color:var(--t3)">Target VPBankS</div></div>
+      <div class="scd" style="background:var(--bg3)"><div class="scd-v cond" style="color:var(--jade)">+16%</div><div class="scd-l mono" style="color:var(--t3)">Capital gain</div></div>
+      <div class="scd" style="background:var(--bg3)"><div class="scd-v cond" style="color:var(--jade)">+22%</div><div class="scd-l mono" style="color:var(--t3)">Tổng return + div 6%</div></div>
+    </div>
+    <div id="su" class="scdata" style="display:none">
+      <div class="scd" style="background:var(--vL);border:1px solid var(--vB)"><div class="scd-v cond" style="color:var(--p)">49.700đ</div><div class="scd-l mono" style="color:var(--p)">Tràng Cát + Trump HY</div></div>
+      <div class="scd" style="background:var(--vL);border:1px solid var(--vB)"><div class="scd-v cond" style="color:var(--p)">+46%</div><div class="scd-l mono" style="color:var(--p)">FPE 2026 ~12,9×</div></div>
+      <div class="scd" style="background:var(--vL);border:1px solid var(--vB)"><div class="scd-v cond" style="color:var(--p)">+52%</div><div class="scd-l mono" style="color:var(--p)">Tổng return + div</div></div>
+    </div>
+    <div id="sd" class="scdata" style="display:none">
+      <div class="scd" style="background:var(--roseL);border:1px solid var(--roseB)"><div class="scd-v cond" style="color:var(--rose)">30.000đ</div><div class="scd-l mono" style="color:var(--rose)">Pháp lý trì hoãn</div></div>
+      <div class="scd" style="background:var(--roseL);border:1px solid var(--roseB)"><div class="scd-v cond" style="color:var(--rose)">-12%</div><div class="scd-l mono" style="color:var(--rose)">Phá support 30k</div></div>
+      <div class="scd" style="background:var(--roseL);border:1px solid var(--roseB)"><div class="scd-v cond" style="color:var(--or)">-6%</div><div class="scd-l mono" style="color:var(--or)">Bảo vệ một phần div</div></div>
+    </div>
+  </div>
+  <div class="vcg rv">
+    <div class="vc"><div class="vc-m">P/E cơ sở<br>EPS 2.276đ × 17×</div><div class="vc-p cond">38.700đ</div><div class="vc-u cond">+14%</div><div class="vc-b">P/E TB ngành KCN</div></div>
+    <div class="vc star"><div class="vc-m">Forward P/E 2026<br>EPS 4.100đ × 10×</div><div class="vc-p cond">41.000đ</div><div class="vc-u cond">+21%</div><div class="vc-b">Backlog 148ha kích hoạt</div></div>
+    <div class="vc"><div class="vc-m">VPBankS Research<br>Mua · 12 tháng</div><div class="vc-p cond">39.400đ</div><div class="vc-u cond">+16%</div><div class="vc-b">Cập nhật 4/2026</div></div>
+    <div class="vc"><div class="vc-m">Bull · Tràng Cát<br>+ Trump HY</div><div class="vc-p cond">49.700đ</div><div class="vc-u cond">+46%</div><div class="vc-b">FPE 2026 ~12,9×</div></div>
+  </div>
+  <div class="rv" style="margin-bottom:18px">
+    <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;letter-spacing:.02em;color:var(--t0);margin-bottom:14px">Rủi ro cần theo dõi</h3>
+    <div class="rlist">
+      <div class="ri"><span class="rb rh">CAO</span><div><div class="ri-t cond">Đòn bẩy tài chính tăng mạnh 107% nợ/VCSH</div><div class="ri-d">Nợ vay ×2,8 lên 28.600 tỷ. Chi phí lãi vay tăng mạnh ăn vào LN. Dòng tiền KD âm 18.000 tỷ bù bằng phát hành CP + vay. Đây là rủi ro chính cần theo dõi hàng quý.</div></div></div>
+      <div class="ri"><span class="rb rm">TRUNG BÌNH</span><div><div class="ri-t cond">Pháp lý KĐT Tràng Cát / KCN Tràng Duệ 3 trì hoãn</div><div class="ri-d">Nếu bàn giao chậm hơn kế hoạch, LN 2026 sẽ bị trì hoãn. Đây là rủi ro lớn thứ 2 sau đòn bẩy. Lịch sử KBC 2024 là cảnh báo rõ ràng.</div></div></div>
+      <div class="ri"><span class="rb rm">TRUNG BÌNH</span><div><div class="ri-t cond">Thuế quan Mỹ — FDI thận trọng ngắn hạn</div><div class="ri-d">10–15% khách đàm phán trì hoãn. Nhưng FDI Trung Quốc "né" thuế sang VN đang tăng — KBC xem là lợi thế cạnh tranh. Tác động ngắn hạn, không ảnh hưởng luận điểm dài hạn.</div></div></div>
+      <div class="ri"><span class="rb rl2">THẤP</span><div><div class="ri-t cond">HTK tăng 94% — Rủi ro tồn kho</div><div class="ri-d">HTK từ 13.850 lên 26.955 tỷ do GPMB đồng thời nhiều KCN. Đặc tính bình thường của KCN đang đầu tư gối đầu — sẽ chuyển thành DT khi bàn giao đất.</div></div></div>
+    </div>
+  </div>
+  <div class="abox rv">
+    <div class="ab-hd"><div class="ab-icon">▲</div><div><div class="ab-t cond">Hành động: Gia tăng tỷ trọng (DCA Mạnh)</div><div class="ab-s">Forward P/E 2026 ~8,3× với LN +80% — rẻ nhất nhóm KCN niêm yết · Trump HY chưa vào giá</div></div></div>
+    <div class="ab-body">
+      <div class="ai"><div class="ai-dot"></div><div class="ai-t"><strong>Forward P/E 2026 ~8,3×:</strong> Nếu LNST 2026 đạt 3.860 tỷ (+80%), P/E tại 34k chỉ 8,3× — cực kỳ hấp dẫn cho developer KCN+KĐT.</div></div>
+      <div class="ai"><div class="ai-dot"></div><div class="ai-t"><strong>DCA 3–4 đợt vùng 30.000–36.000đ:</strong> Ưu tiên mua khi áp lực từ phát hành thêm CP — cơ hội tích lũy tốt nhất.</div></div>
+      <div class="ai"><div class="ai-dot"></div><div class="ai-t"><strong>Trigger chính #1:</strong> KĐT Tràng Cát ký HĐ sỉ đầu tiên → xác nhận mảng KĐT tạo dòng tiền thực.</div></div>
+      <div class="ai"><div class="ai-dot"></div><div class="ai-t"><strong>Trigger chính #2:</strong> KCN Tràng Duệ 3 bàn giao đất Q2/2026 → xác nhận tiến độ dự án lớn nhất.</div></div>
+      <div class="ai"><div class="ai-dot"></div><div class="ai-t"><strong>Stop 26.000đ:</strong> Phá support kèm khối lượng lớn và pháp lý Tràng Cát tiếp tục trì hoãn → xem xét lại.</div></div>
+      <div class="ai"><div class="ai-dot"></div><div class="ai-t"><strong>Chốt lời 1 phần tại 45.000đ:</strong> P/E 2026 ~11,6× → giảm 20–30% tỷ trọng sau khi Trump HY mở bán.</div></div>
+    </div>
+  </div>
+  <div class="sigr rv">
+    <div class="sig"><div class="sig-v cond" style="color:var(--p)">5.215ha</div><div class="sig-l">Quỹ đất KCN + 1.177ha KĐT<br><span>Tài sản ngầm chưa phản ánh vào giá CP</span></div></div>
+    <div class="sig"><div class="sig-v cond" style="color:var(--jade)">148ha</div><div class="sig-l">Backlog kỷ lục → 2026<br><span>Visibility cao nhất ngành KCN niêm yết</span></div></div>
+    <div class="sig"><div class="sig-v cond" style="color:var(--or)">+46%</div><div class="sig-l">Upside bull (Tràng Cát + Trump HY)<br><span>Hai wildcard chưa vào mô hình định giá</span></div></div>
+  </div>
+</section>
+</div>
+<footer>
+  <div class="ft"><div class="ftt"><div><div class="ft-brand cond">TỔNG CÔNG TY PHÁT TRIỂN ĐÔ THỊ KINH BẮC – CTCP · KBC</div><div class="ft-sub mono">HOSE: KBC · Kiểm toán E&Y · Phân tích 25/04/2026</div></div><div style="font-size:11px;color:var(--t3)">Phân tích độc lập · Không phải tư vấn đầu tư</div></div>
+  <p class="ft-disc">Báo cáo tổng hợp từ BCTC kiểm toán KBC (E&Y VN 2023–2025), ĐHĐCĐ 2026, VPBankS Research, Vietcap Research, CafeF, Vietstock, Fireant, 24HMoney, SimplyWallSt, DNSE, KBSV. Chỉ mang tính tham khảo — <strong style="color:var(--t1)">KHÔNG PHẢI tư vấn đầu tư chính thức</strong>. Đầu tư có rủi ro.</p></div>
+</footer>
+<script>
+const grd='rgba(255,255,255,.03)',tc='#303858';
+new Chart(document.getElementById('c1'),{data:{labels:['2021','2022','2023','2024','2025'],datasets:[{type:'bar',label:'DT',data:[2183,1391,5885,2776,6687],backgroundColor:['rgba(234,88,12,.3)','rgba(234,88,12,.35)','rgba(234,88,12,.5)','rgba(234,88,12,.3)','#EA580C'],borderRadius:4,yAxisID:'y'},{type:'bar',label:'LNST',data:[972,300,2218,383,2147],backgroundColor:['rgba(167,139,250,.3)','rgba(167,139,250,.25)','rgba(167,139,250,.6)','rgba(167,139,250,.2)','#A78BFA'],borderRadius:4,yAxisID:'y'},{type:'line',label:'Biên%',data:[44.5,21.6,37.7,13.8,32.1],borderColor:'#10B981',backgroundColor:'transparent',tension:.4,pointRadius:5,pointBackgroundColor:'#10B981',borderWidth:2,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{position:'left',ticks:{color:tc,font:{size:10}},grid:{color:grd}},y2:{position:'right',min:0,max:60,ticks:{color:tc,font:{size:10},callback:v=>v+'%'},grid:{display:false}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}}});
+new Chart(document.getElementById('c2'),{type:'doughnut',data:{labels:['KCN cho thuê đất','KĐT Tràng Cát','Trump Int\'l HY','KĐT + CCN khác','Nhà xưởng xây sẵn'],datasets:[{data:[13500,9000,776,2500,1179],backgroundColor:['#7C3AED','#A78BFA','#EA580C','#38BDF8','#10B981'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'right',labels:{color:tc,font:{size:10},boxWidth:10,padding:12}}}}});
+const tg=document.getElementById('tg');
+if(tg)tg.addEventListener('click',e=>{const btn=e.target.closest('.tog');if(!btn)return;document.querySelectorAll('.tog').forEach(b=>b.classList.remove('on'));btn.classList.add('on');['b','u','d'].forEach(k=>{const el=document.getElementById('s'+k);if(el)el.style.display=k===btn.dataset.s?'grid':'none';});});
+const io=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('vis'),i*55);});},{threshold:.06});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+const secs=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.nlinks a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id});links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+c));},{passive:true});
+</script>
+</body>
+</html>

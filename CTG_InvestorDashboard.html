@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CTG · VietinBank — Investment Thesis 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+/* ══ TOKENS ══ */
+:root {
+  --bg:       #0F1117;
+  --bg2:      #161B27;
+  --bg3:      #1E2536;
+  --bg4:      #252D3E;
+  --border:   rgba(255,255,255,.07);
+  --border2:  rgba(255,255,255,.13);
+  --text:     #F0F2F8;
+  --text2:    #8B93A9;
+  --text3:    #555E73;
+  --blue:     #3B82F6;
+  --blue2:    #1D4ED8;
+  --blue-bg:  rgba(59,130,246,.10);
+  --cyan:     #22D3EE;
+  --green:    #22C55E;
+  --green-bg: rgba(34,197,94,.10);
+  --amber:    #F59E0B;
+  --amber-bg: rgba(245,158,11,.10);
+  --red:      #EF4444;
+  --red-bg:   rgba(239,68,68,.10);
+  --purple:   #A78BFA;
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 18px;
+  --sh: 0 4px 24px rgba(0,0,0,.35);
+  --t: all .18s cubic-bezier(.4,0,.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ══ SCROLLBAR ══ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+
+/* ══ NAV ══ */
+.nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(15,17,23,.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  height: 56px; display: flex; align-items: center;
+}
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+}
+.nav-left { display: flex; align-items: center; gap: 14px; }
+.nav-chip {
+  background: var(--blue); color: #fff;
+  font-size: 12px; font-weight: 800;
+  padding: 4px 10px; border-radius: var(--r-sm);
+  letter-spacing: .04em;
+}
+.nav-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.nav-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+.nav-links { display: flex; gap: 4px; list-style: none; }
+.nav-links a {
+  font-size: 11.5px; font-weight: 500; color: var(--text2);
+  text-decoration: none; padding: 5px 11px; border-radius: var(--r-sm);
+  transition: var(--t); letter-spacing: .04em; text-transform: uppercase;
+}
+.nav-links a:hover, .nav-links a.on { color: var(--text); background: var(--bg3); }
+.nav-verdict {
+  background: linear-gradient(135deg, var(--green), #16A34A);
+  color: #fff; font-size: 11.5px; font-weight: 700;
+  padding: 6px 16px; border-radius: var(--r-md);
+  text-decoration: none; letter-spacing: .04em; transition: var(--t);
+}
+.nav-verdict:hover { opacity: .85; }
+.ham { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; }
+.ham span { width: 20px; height: 1.5px; background: var(--text2); border-radius: 1px; }
+
+/* ══ LAYOUT ══ */
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ══ HERO ══ */
+.hero {
+  background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 60%);
+  border-bottom: 1px solid var(--border);
+  padding: 52px 0 44px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; right: -180px; top: -100px;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-grid { display: grid; grid-template-columns: 1fr 400px; gap: 48px; align-items: center; }
+.hero-ey {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 18px;
+}
+.ey-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.ey-txt {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 500;
+  color: var(--text2); letter-spacing: .14em; text-transform: uppercase;
+}
+.hero-h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800; line-height: 1.08; color: var(--text);
+  margin-bottom: 14px;
+}
+.hero-h1 .acc { color: var(--blue); }
+.hero-p {
+  font-size: .9375rem; color: var(--text2);
+  line-height: 1.7; margin-bottom: 26px; max-width: 520px;
+  font-weight: 300;
+}
+.hero-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 32px; }
+.htag {
+  font-size: 10.5px; font-weight: 500;
+  color: var(--text2); background: var(--bg3);
+  padding: 4px 10px; border-radius: 20px;
+  border: 1px solid var(--border);
+}
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-p {
+  background: var(--blue); color: #fff;
+  font-size: 13px; font-weight: 600;
+  padding: 10px 22px; border-radius: var(--r-md);
+  text-decoration: none; transition: var(--t); display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-p:hover { background: var(--blue2); }
+.btn-s {
+  background: var(--bg3); color: var(--text);
+  font-size: 13px; font-weight: 500;
+  padding: 10px 22px; border-radius: var(--r-md);
+  text-decoration: none; transition: var(--t);
+  border: 1px solid var(--border2);
+}
+.btn-s:hover { background: var(--bg4); }
+
+/* KPI PANEL */
+.kpi-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  box-shadow: var(--sh);
+}
+.kpi-panel-hd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; color: var(--text3);
+  letter-spacing: .14em; text-transform: uppercase;
+  margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.kpi {
+  background: var(--bg3); border-radius: var(--r-md);
+  padding: 14px 16px; transition: var(--t); cursor: default;
+}
+.kpi:hover { background: var(--bg4); }
+.kpi.full { grid-column: 1/-1; }
+.kpi-l { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+.kpi-v { font-size: 1.5rem; font-weight: 800; color: var(--text); line-height: 1; font-family: 'JetBrains Mono', monospace; }
+.kpi-v.g { color: var(--green); }
+.kpi-v.b { color: var(--cyan); }
+.kpi-v.a { color: var(--amber); }
+.kpi-n { font-size: 10px; color: var(--text3); margin-top: 3px; line-height: 1.3; }
+
+/* VERDICT STRIP */
+.verdict-strip {
+  background: linear-gradient(90deg, var(--green), #16A34A);
+  padding: 12px 0;
+}
+.vstrip-in {
+  max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.vs-left { display: flex; align-items: center; gap: 10px; }
+.vs-icon { font-size: 18px; }
+.vs-title { font-size: 13px; font-weight: 800; color: #fff; }
+.vs-sub { font-size: 11.5px; color: rgba(255,255,255,.75); margin-top: 1px; }
+.vs-nums { display: flex; gap: 24px; }
+.vsn { text-align: center; }
+.vsn-v { font-size: 16px; font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; }
+.vsn-l { font-size: 9.5px; color: rgba(255,255,255,.65); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
+
+/* ══ SECTIONS ══ */
+section { padding: 56px 0; }
+.sec-ey { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--blue); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px; }
+.sec-h { font-size: 1.5rem; font-weight: 800; color: var(--text); margin-bottom: 8px; line-height: 1.2; }
+.sec-p { font-size: .875rem; color: var(--text2); line-height: 1.65; max-width: 600px; }
+.sec-hd { margin-bottom: 32px; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ══ CARDS ══ */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); box-shadow: var(--sh);
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--border2); }
+.card-p { padding: 22px 24px; }
+.card-hd { font-size: .875rem; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.card-ey { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--text3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+
+/* STORY CALLOUT */
+.story-callout {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+  padding: 22px 26px; margin-bottom: 32px;
+}
+.story-callout p { font-size: 1rem; color: var(--text); line-height: 1.78; font-weight: 300; }
+.story-callout strong { color: var(--cyan); font-weight: 600; }
+
+/* PHASE CHIPS */
+.phase-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 32px; }
+.phase-chip {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 18px 20px;
+  transition: var(--t);
+}
+.phase-chip:hover { border-color: var(--border2); background: var(--bg3); }
+.pc-lbl { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
+.pc-val { font-size: .875rem; font-weight: 700; color: var(--text); }
+.pc-note { font-size: .75rem; color: var(--text2); margin-top: 4px; line-height: 1.4; }
+
+/* CATALYST CARDS */
+.catalysts { display: flex; flex-direction: column; gap: 10px; }
+.cat {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 18px 20px;
+  display: grid; grid-template-columns: 44px 1fr;
+  gap: 14px; align-items: start;
+  transition: var(--t); cursor: default;
+  position: relative; overflow: hidden;
+}
+.cat::after {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--blue); opacity: 0; transition: var(--t);
+}
+.cat:hover { background: var(--bg3); border-color: var(--border2); }
+.cat:hover::after { opacity: 1; }
+.cat-n {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--blue-bg); border: 1px solid rgba(59,130,246,.25);
+  color: var(--blue); font-size: 14px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-family: 'JetBrains Mono', monospace;
+}
+.cat-title { font-size: .875rem; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+.cat-desc { font-size: .78125rem; color: var(--text2); line-height: 1.55; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.chip {
+  font-size: 10px; font-weight: 600; padding: 2px 8px;
+  border-radius: 20px;
+}
+.chip-b { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(59,130,246,.2); }
+.chip-g { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,.2); }
+.chip-a { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+.chip-p { background: rgba(167,139,250,.1); color: var(--purple); border: 1px solid rgba(167,139,250,.2); }
+.chip-r { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,.2); }
+
+/* MOAT GRID */
+.moat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.moat-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 18px 20px;
+  display: flex; gap: 14px; transition: var(--t);
+}
+.moat-card:hover { border-color: var(--amber); background: var(--bg3); }
+.moat-icon {
+  width: 42px; height: 42px; border-radius: var(--r-md);
+  background: var(--amber-bg); border: 1px solid rgba(245,158,11,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.moat-title { font-size: .8125rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.moat-desc { font-size: .75rem; color: var(--text2); line-height: 1.5; }
+.moat-card.full-c { grid-column: 1/-1; }
+
+/* CHART CARDS */
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.cw { position: relative; width: 100%; }
+
+/* GAUGE ROW */
+.gauge-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
+.gauge {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 16px;
+  text-align: center; transition: var(--t);
+}
+.gauge:hover { border-color: var(--border2); background: var(--bg3); }
+.g-val { font-size: 1.25rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+.g-lbl { font-size: 10px; color: var(--text3); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.g-sub { font-size: 10px; color: var(--text3); margin-top: 3px; line-height: 1.3; }
+
+/* EPS TIMELINE */
+.eps-wrap {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 24px; margin-bottom: 16px;
+}
+.eps-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+.eps-title { font-size: .875rem; font-weight: 700; color: var(--text); }
+.eps-badge { font-size: 10px; font-weight: 700; background: var(--green-bg); color: var(--green); padding: 3px 9px; border-radius: 20px; border: 1px solid rgba(34,197,94,.2); font-family: 'JetBrains Mono', monospace; }
+.eps-track { position: relative; display: grid; grid-template-columns: repeat(6,1fr); padding: 8px 0; }
+.eps-track::before {
+  content: ''; position: absolute;
+  top: 16px; left: 8.33%; right: 8.33%;
+  height: 1.5px; background: var(--border2); z-index: 0;
+}
+.eps-node { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+.eps-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2.5px solid var(--bg);
+  margin-bottom: 10px; flex-shrink: 0;
+}
+.d-n { background: var(--text3); }
+.d-peak { background: var(--blue); box-shadow: 0 0 0 4px rgba(59,130,246,.2); }
+.d-low { background: var(--red); box-shadow: 0 0 0 4px rgba(239,68,68,.15); }
+.d-mid { background: var(--amber); box-shadow: 0 0 0 4px rgba(245,158,11,.15); }
+.d-now { background: var(--green); box-shadow: 0 0 0 5px rgba(34,197,94,.18); animation: gp 2s infinite; }
+.d-fwd { background: var(--purple); box-shadow: 0 0 0 4px rgba(167,139,250,.2); }
+@keyframes gp { 0%,100%{box-shadow:0 0 0 5px rgba(34,197,94,.18);} 50%{box-shadow:0 0 0 9px rgba(34,197,94,.07);} }
+.eps-v { font-size: .8125rem; font-weight: 800; color: var(--text); margin-bottom: 2px; font-family: 'JetBrains Mono', monospace; }
+.eps-y { font-size: .6875rem; color: var(--text3); font-weight: 500; }
+.eps-note { font-size: .625rem; color: var(--text3); margin-top: 2px; text-align: center; line-height: 1.3; }
+.eps-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+.el { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text2); }
+.el-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+/* METRIC TABLE */
+.mtbl-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-xl); overflow: hidden; margin-bottom: 16px; }
+.mtbl-hd { padding: 16px 20px 12px; border-bottom: 1px solid var(--border); }
+.mtbl { width: 100%; border-collapse: collapse; font-size: .8125rem; }
+.mtbl thead tr { background: rgba(255,255,255,.03); }
+.mtbl thead th { padding: 10px 16px; text-align: left; font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; }
+.mtbl tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+.mtbl tbody tr:hover { background: rgba(255,255,255,.02); }
+.mtbl tbody tr:last-child { border-bottom: none; }
+.mtbl td { padding: 10px 16px; color: var(--text2); vertical-align: top; line-height: 1.45; }
+.mtbl td.v { color: var(--text); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: .75rem; }
+.mtbl td.pos { color: var(--green); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.mtbl td.warn { color: var(--amber); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.mtbl td.inf { color: var(--cyan); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+
+/* PLAN GRID */
+.plan-g { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.plan-c {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 16px 18px; transition: var(--t);
+}
+.plan-c:hover { border-color: var(--border2); background: var(--bg3); }
+.plan-c.hi { border-color: rgba(34,197,94,.25); background: var(--green-bg); }
+.plan-c.hi .plan-v { color: var(--green); }
+.plan-l { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 5px; }
+.plan-v { font-size: 1.25rem; font-weight: 800; color: var(--text); font-family: 'JetBrains Mono', monospace; line-height: 1.1; margin-bottom: 3px; }
+.plan-delta { font-size: .6875rem; font-weight: 700; color: var(--green); }
+.plan-delta.n { color: var(--text3); }
+.plan-note { font-size: .6875rem; color: var(--text2); margin-top: 4px; line-height: 1.35; }
+
+/* VALUATION */
+.price-wrap {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 22px 24px; margin-bottom: 16px;
+}
+.price-hd { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.pt-title { font-size: .875rem; font-weight: 700; color: var(--text); }
+.pt-date { font-size: .6875rem; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+.pt-body { padding: 0 1.5%; }
+.pt-bar { position: relative; height: 8px; background: var(--bg4); border-radius: 4px; margin-bottom: 10px; }
+.pt-fill { position: absolute; left: 0; height: 100%; background: linear-gradient(90deg, var(--blue2), var(--blue)); border-radius: 4px; width: 42%; }
+.pt-dot { position: absolute; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid var(--bg); }
+.pt-cur { background: var(--cyan); left: calc(42% - 7px); }
+.pt-tgt { background: var(--green); right: -7px; }
+.pt-lbls { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+.pt-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 16px; }
+.pts { text-align: center; background: var(--bg3); border-radius: var(--r-md); padding: 12px; }
+.pts-v { font-size: 1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+.pts-l { font-size: 10px; color: var(--text3); letter-spacing: .04em; text-transform: uppercase; margin-top: 2px; }
+.val-g { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
+.vc {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 16px 14px;
+  text-align: center; transition: var(--t);
+}
+.vc:hover { border-color: var(--border2); transform: translateY(-2px); }
+.vc.feat { border-color: rgba(59,130,246,.35); background: var(--blue-bg); }
+.vc-m { font-size: .6875rem; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; line-height: 1.3; }
+.vc-p { font-size: 1.3rem; font-weight: 800; color: var(--text); font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+.vc-u { font-size: .875rem; font-weight: 800; color: var(--green); font-family: 'JetBrains Mono', monospace; }
+.vc-b { font-size: .6875rem; color: var(--text3); margin-top: 4px; }
+
+/* RISK LIST */
+.risks { display: flex; flex-direction: column; gap: 10px; }
+.risk-item {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 14px 16px;
+  display: flex; gap: 12px; align-items: flex-start; transition: var(--t);
+}
+.risk-item:hover { background: var(--bg3); }
+.rbadge { flex-shrink: 0; padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: .04em; }
+.rh { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,.2); }
+.rm { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+.rl { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,.2); }
+.risk-title { font-size: .8125rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.risk-desc { font-size: .75rem; color: var(--text2); line-height: 1.5; }
+
+/* DCA ACTION BOX */
+.dca-box {
+  background: linear-gradient(135deg, rgba(34,197,94,.07), rgba(34,197,94,.03));
+  border: 1px solid rgba(34,197,94,.22);
+  border-radius: var(--r-xl); padding: 26px 28px; margin-bottom: 16px;
+}
+.dca-hd { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.dca-icon {
+  width: 40px; height: 40px; background: var(--green-bg);
+  border: 1px solid rgba(34,197,94,.25); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.dca-title { font-size: 1rem; font-weight: 800; color: var(--green); }
+.dca-sub { font-size: .8125rem; color: rgba(34,197,94,.7); margin-top: 1px; }
+.dca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.dca-item { display: flex; gap: 8px; align-items: flex-start; }
+.dca-bul { width: 5px; height: 5px; border-radius: 50%; background: var(--green); flex-shrink: 0; margin-top: 6px; }
+.dca-txt { font-size: .8125rem; color: rgba(34,197,94,.85); line-height: 1.5; }
+.dca-txt strong { color: #dcfce7; font-weight: 700; }
+.sig-g { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 16px; }
+.sig-c {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 16px 18px;
+}
+.sig-v { font-size: 1.375rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+.sig-l { font-size: .6875rem; color: var(--text2); line-height: 1.4; }
+.sig-l span { color: var(--text3); }
+
+/* CHART LEGEND */
+.leg { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; }
+.li { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
+.ld { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+/* TOGGLE TABS */
+.ttabs { display: flex; gap: 0; background: var(--bg3); border-radius: var(--r-md); padding: 3px; width: fit-content; margin-bottom: 14px; }
+.tt { padding: 6px 16px; border-radius: var(--r-sm); font-size: 12px; font-weight: 600; border: none; background: transparent; color: var(--text2); cursor: pointer; transition: var(--t); }
+.tt.on { background: var(--bg); color: var(--text); }
+
+/* FOOTER */
+footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 28px 0 20px; margin-top: 48px; }
+.ft { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+.ft-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.ft-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.ft-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.ft-disc { font-size: .6875rem; color: var(--text3); line-height: 1.7; padding-top: 16px; }
+
+/* ══ RESPONSIVE ══ */
+@media(max-width: 1024px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+  .kpi-panel { max-width: 500px; }
+}
+@media(max-width: 768px) {
+  section { padding: 36px 0; }
+  .hero { padding: 36px 0 28px; }
+  .hero-grid, .chart-row, .moat-grid, .plan-g, .val-g, .sig-g, .dca-grid { grid-template-columns: 1fr; }
+  .phase-row { grid-template-columns: 1fr; }
+  .gauge-row { grid-template-columns: repeat(2,1fr); }
+  .eps-track { grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .eps-track::before { display: none; }
+  .moat-card.full-c { grid-column: 1; }
+  .nav-links, .nav-verdict { display: none; }
+  .ham { display: flex; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .vs-nums { display: none; }
+}
+@media(max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .gauge-row { grid-template-columns: 1fr 1fr; }
+  .val-g { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <span class="nav-chip">CTG</span>
+      <div>
+        <div class="nav-name">VIETINBANK</div>
+        <div class="nav-sub">HOSE · Ngân hàng Thương mại</div>
+      </div>
+    </div>
+    <ul class="nav-links" id="nl">
+      <li><a href="#thesis">Thesis</a></li>
+      <li><a href="#catalyst">Catalyst</a></li>
+      <li><a href="#moat">Moat</a></li>
+      <li><a href="#financials">Tài chính</a></li>
+      <li><a href="#valuation">Định giá</a></li>
+    </ul>
+    <a href="#valuation" class="nav-verdict">Kết luận ↓</a>
+    <div class="ham" id="ham"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-ey">
+          <div class="ey-dot"></div>
+          <span class="ey-txt">Báo cáo phân tích đầu tư · Cập nhật 25/04/2026</span>
+        </div>
+        <h1 class="hero-h1">Điểm uốn<br><span class="acc">chu kỳ lợi nhuận</span><br>ngân hàng</h1>
+        <p class="hero-p">VietinBank Top 2 lợi nhuận ngành, ROE 21,25% — nhưng đang định giá P/E 8× như một cổ phiếu bình thường. Dự phòng giảm 37% đã giải phóng lợi nhuận. 2026 là năm tăng tốc.</p>
+        <div class="hero-tags">
+          <span class="htag">HOSE: CTG</span>
+          <span class="htag">Big 4 Bank</span>
+          <span class="htag">Kiểm toán: Deloitte VN</span>
+          <span class="htag">Vững mạnh · Peter Lynch</span>
+          <span class="htag">MUFG 19,73% cổ đông</span>
+        </div>
+        <div class="hero-btns">
+          <a href="#valuation" class="btn-p">Xem định giá →</a>
+          <a href="#financials" class="btn-s">Dữ liệu tài chính</a>
+        </div>
+      </div>
+      <div>
+        <div class="kpi-panel">
+          <div class="kpi-panel-hd">Snapshot · 24/04/2026</div>
+          <div class="kpi-grid">
+            <div class="kpi">
+              <div class="kpi-l">Giá hiện tại</div>
+              <div class="kpi-v b">35.650<span style="font-size:.9rem;font-weight:400">đ</span></div>
+              <div class="kpi-n">HOSE · 24/04/2026</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-l">EPS 2025</div>
+              <div class="kpi-v g">~4.470<span style="font-size:.9rem;font-weight:400">đ</span></div>
+              <div class="kpi-n">LNST ~34.700 tỷ / 7,77 tỷ CP</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-l">P/E Trailing</div>
+              <div class="kpi-v g">8,0<span style="font-size:.9rem;font-weight:400">×</span></div>
+              <div class="kpi-n">TB ngành ~9–10×</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-l">Forward P/E 2026</div>
+              <div class="kpi-v a">7,2<span style="font-size:.9rem;font-weight:400">×</span></div>
+              <div class="kpi-n">Rất hấp dẫn</div>
+            </div>
+            <div class="kpi full">
+              <div class="kpi-l">LNTT 2025 — Top 2 ngành</div>
+              <div class="kpi-v g" style="font-size:1.75rem">43.400 <span style="font-size:1rem;font-weight:400">tỷ đồng</span></div>
+              <div class="kpi-n">+36,8% YoY · Dự phòng giảm 37,3%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT STRIP -->
+<div class="verdict-strip">
+  <div class="vstrip-in">
+    <div class="vs-left">
+      <div class="vs-icon">▲</div>
+      <div>
+        <div class="vs-title">GIA TĂNG TỶ TRỌNG — MUA PHÂN KỲ (DCA)</div>
+        <div class="vs-sub">Vùng 33.000–37.000đ · Stop 30.000đ · Review Q2/2026</div>
+      </div>
+    </div>
+    <div class="vs-nums">
+      <div class="vsn"><div class="vsn-v">+25%</div><div class="vsn-l">Upside cơ sở</div></div>
+      <div class="vsn"><div class="vsn-v">+46%</div><div class="vsn-l">Upside tích cực</div></div>
+      <div class="vsn"><div class="vsn-v">21,25%</div><div class="vsn-l">ROE 2025</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- SECTION 1: THESIS -->
+<section id="thesis">
+  <div class="sec-hd">
+    <div class="sec-ey">01 — Investment Thesis</div>
+    <h2 class="sec-h">Câu chuyện đầu tư cốt lõi</h2>
+    <p class="sec-p">Một luận điểm đơn giản, số liệu kiểm toán, không cần đoán mò.</p>
+  </div>
+  <div class="story-callout">
+    <p>VietinBank đang ở <strong>điểm uốn của chu kỳ lợi nhuận</strong>: chi phí dự phòng giảm 37,3% trong 2025 đã giải phóng lợi nhuận tăng 36,8% — <strong>chỉ từ việc nợ xấu được kiểm soát tốt hơn</strong>. Với tín dụng tiếp tục tăng 17% và dư địa thu hồi 10.000 tỷ nợ xấu, câu chuyện 2026 là: <strong>ngân hàng quốc doanh Top 2 đang được định giá như một cổ phiếu bình thường.</strong></p>
+  </div>
+  <div class="phase-row">
+    <div class="phase-chip">
+      <div class="pc-lbl">Nhóm Peter Lynch</div>
+      <div class="pc-val" style="color:var(--cyan)">Vững mạnh</div>
+      <div class="pc-note">Ngân hàng quốc doanh Top 2. Tăng trưởng lợi nhuận ổn định dài hạn.</div>
+    </div>
+    <div class="phase-chip">
+      <div class="pc-lbl">Giai đoạn tăng trưởng</div>
+      <div class="pc-val" style="color:var(--green)">Giữa → Tăng tốc</div>
+      <div class="pc-note">Qua đáy dự phòng 2023–2024. ROE 21,25% và đang tăng.</div>
+    </div>
+    <div class="phase-chip">
+      <div class="pc-lbl">Dư địa mở rộng</div>
+      <div class="pc-val" style="color:var(--blue)">Lớn (5–7 năm)</div>
+      <div class="pc-note">Bancassurance, VIFC, tín dụng bán lẻ, tài chính tiêu dùng.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 2: CATALYSTS -->
+<section id="catalyst">
+  <div class="sec-hd">
+    <div class="sec-ey">02 — Growth Catalysts 2026</div>
+    <h2 class="sec-h">5 Catalyst chính năm 2026</h2>
+    <p class="sec-p">Từng yếu tố đang hội tụ — nội tại, vĩ mô, và cấu trúc vốn.</p>
+  </div>
+  <div class="catalysts">
+    <div class="cat">
+      <div class="cat-n">01</div>
+      <div>
+        <div class="cat-title">Giảm dự phòng tiếp tục — động lực lợi nhuận số 1</div>
+        <div class="cat-desc">Chi phí dự phòng 2025: 17,3 nghìn tỷ (giảm 37,3%). NPL 1,1%, bao phủ nợ xấu 158,8% — Top 2 toàn hệ thống. Kế hoạch thu hồi 10.000 tỷ nợ đã xử lý = nguồn thu ngoài lãi bổ sung.</div>
+        <div class="chips"><span class="chip chip-g">NPL 1,1%</span><span class="chip chip-g">LLCR 158,8%</span><span class="chip chip-b">10.000 tỷ thu hồi</span></div>
+      </div>
+    </div>
+    <div class="cat">
+      <div class="cat-n">02</div>
+      <div>
+        <div class="cat-title">Tăng vốn đột biến — vốn điều lệ vượt 100.000 tỷ</div>
+        <div class="cat-desc">16.200 tỷ lợi nhuận giữ lại dùng chia cổ phiếu. Kết hợp các phương án chờ duyệt → VĐL vượt 100.000 tỷ. Mở rộng dư địa tín dụng tương ứng theo CAR.</div>
+        <div class="chips"><span class="chip chip-b">+16.200 tỷ vốn</span><span class="chip chip-a">CAR cải thiện</span><span class="chip chip-p">Top 3 vốn tự có</span></div>
+      </div>
+    </div>
+    <div class="cat">
+      <div class="cat-n">03</div>
+      <div>
+        <div class="cat-title">Tín dụng 17% — lợi thế chi phí vốn thấp nhất hệ thống</div>
+        <div class="cat-desc">GDP mục tiêu 10%+ + Nghị quyết 68 kinh tế tư nhân + BĐS phục hồi. CASA 25,5% (+14,8%) — chi phí huy động thấp hơn đối thủ tư nhân 50–80bps.</div>
+        <div class="chips"><span class="chip chip-g">CASA 25,5%</span><span class="chip chip-b">Tín dụng bán lẻ +27% H1/2025</span></div>
+      </div>
+    </div>
+    <div class="cat">
+      <div class="cat-n">04</div>
+      <div>
+        <div class="cat-title">VIFC + 5 VP nước ngoài — thu nhập ngoài lãi dài hạn</div>
+        <div class="cat-desc">Tham gia Trung tâm Tài chính Quốc tế Việt Nam + mở 5 văn phòng đại diện. Phục vụ 500.000+ doanh nghiệp, đặc biệt khối FDI Nhật–Hàn–Đài Loan 30 năm quan hệ.</div>
+        <div class="chips"><span class="chip chip-p">VIFC catalyst</span><span class="chip chip-b">FDI banking</span><span class="chip chip-a">Non-interest income</span></div>
+      </div>
+    </div>
+    <div class="cat">
+      <div class="cat-n">05</div>
+      <div>
+        <div class="cat-title">Chuyển nhượng tòa nhà CTG — lợi nhuận bất thường H1/2026</div>
+        <div class="cat-desc">Dự kiến hoàn thành H1/2026. Ghi nhận theo giá thị trường. Khoản lợi nhuận one-off hoàn toàn chưa được phản ánh vào định giá hiện tại.</div>
+        <div class="chips"><span class="chip chip-a">One-off gain</span><span class="chip chip-g">H1/2026</span><span class="chip chip-r">Chưa định giá</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 3: MOAT -->
+<section id="moat">
+  <div class="sec-hd">
+    <div class="sec-ey">03 — Competitive Moat</div>
+    <h2 class="sec-h">Lợi thế cạnh tranh bền vững</h2>
+    <p class="sec-p">5 lớp hào khó sao chép — nền tảng ROE 21,25% đang cải thiện.</p>
+  </div>
+  <div class="moat-grid">
+    <div class="moat-card">
+      <div class="moat-icon">🏛️</div>
+      <div>
+        <div class="moat-title">Thương hiệu Nhà nước + MUFG — niềm tin #1</div>
+        <div class="moat-desc">Nhà nước 64,46% + MUFG Nhật 19,73% = 84,19% từ tổ chức tín nhiệm cao nhất. Nền tảng huy động vốn rẻ nhất hệ thống.</div>
+      </div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-icon">🗺️</div>
+      <div>
+        <div class="moat-title">155 chi nhánh + 958 PGD — phủ 63 tỉnh</div>
+        <div class="moat-desc">Mạng lưới toàn quốc không thể sao chép ngắn hạn. Kết hợp CASA 25,5% → chi phí huy động thấp → NIM cải thiện.</div>
+      </div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-icon">🌏</div>
+      <div>
+        <div class="moat-title">Danh mục FDI — lợi thế 30 năm độc đáo</div>
+        <div class="moat-desc">Phục vụ FDI Nhật–Hàn–Đài từ 1994. Nguồn thu phí bền vững, khó cạnh tranh. 1.000+ ngân hàng đại lý tại 90 quốc gia.</div>
+      </div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-icon">🤖</div>
+      <div>
+        <div class="moat-title">AI/Chuyển đổi số X01 — 90+ sáng kiến</div>
+        <div class="moat-desc">50+ ứng dụng AI/ML đang vận hành. CIR cải thiện → biên lợi nhuận mở rộng. Thành lập Khối Dữ liệu & Trí tuệ nhân tạo AI.</div>
+      </div>
+    </div>
+    <div class="moat-card full-c">
+      <div class="moat-icon">💰</div>
+      <div>
+        <div class="moat-title">Vốn điều lệ vượt 100.000 tỷ — Top 3 hệ thống, lộ trình Basel III</div>
+        <div class="moat-desc">Sau đợt phát hành 16.200 tỷ + các phương án chờ duyệt, VĐL vượt 100.000 tỷ. Hệ số CAR cao → dư địa tín dụng lớn hơn đối thủ tư nhân. Từng bước tiệm cận Basel III — chuẩn quốc tế cao nhất Việt Nam.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 4: FINANCIALS -->
+<section id="financials">
+  <div class="sec-hd">
+    <div class="sec-ey">04 — Financial Analysis</div>
+    <h2 class="sec-h">Dữ liệu tài chính BCTC kiểm toán 2025</h2>
+    <p class="sec-p">Thu nhập tăng thực chất. Dự phòng giảm là catalyst, không phải kỹ thuật kế toán.</p>
+  </div>
+
+  <!-- GAUGE ROW -->
+  <div class="gauge-row">
+    <div class="gauge">
+      <div class="g-val" style="color:var(--green)">43.400</div>
+      <div class="g-lbl">LNTT 2025 (tỷ đ)</div>
+      <div class="g-sub">+36,8% YoY · Top 2 ngành</div>
+    </div>
+    <div class="gauge">
+      <div class="g-val" style="color:var(--green)">21,25%</div>
+      <div class="g-lbl">ROE 2025</div>
+      <div class="g-sub">Tăng từ 17,9% (2024)</div>
+    </div>
+    <div class="gauge">
+      <div class="g-val" style="color:var(--cyan)">1,1%</div>
+      <div class="g-lbl">NPL Ratio</div>
+      <div class="g-sub">Giảm từ 1,45% (2024)</div>
+    </div>
+    <div class="gauge">
+      <div class="g-val" style="color:var(--amber)">158,8%</div>
+      <div class="g-lbl">Bao phủ nợ xấu</div>
+      <div class="g-sub">Top 2 toàn hệ thống</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="chart-row">
+    <div class="card card-p">
+      <div class="card-ey">Income & Profit</div>
+      <div class="card-hd">Thu nhập & LNTT 2023–2025 (nghìn tỷ đ)</div>
+      <div class="leg">
+        <div class="li"><div class="ld" style="background:#3B82F6"></div>Thu nhập HĐ</div>
+        <div class="li"><div class="ld" style="background:#22C55E"></div>LNTT</div>
+        <div class="li"><div class="ld" style="background:#F59E0B"></div>CP Dự phòng</div>
+      </div>
+      <div class="cw" style="height:220px">
+        <canvas id="incChart" role="img" aria-label="Thu nhập và lợi nhuận VietinBank 2023-2025">Thu nhập: 75, 81.9, 87.3; LNTT: 23, 31.7, 43.4; Dự phòng: 28, 27.6, 17.3</canvas>
+      </div>
+    </div>
+    <div class="card card-p">
+      <div class="card-ey">Efficiency</div>
+      <div class="card-hd">ROE / ROA / NIM 2023–2025 (%)</div>
+      <div class="leg">
+        <div class="li"><div class="ld" style="background:#22D3EE"></div>ROE</div>
+        <div class="li"><div class="ld" style="background:#A78BFA"></div>ROA</div>
+        <div class="li"><div class="ld" style="background:#F59E0B;border-radius:50%"></div>NIM</div>
+      </div>
+      <div class="cw" style="height:220px">
+        <canvas id="effChart" role="img" aria-label="ROE ROA NIM VietinBank 2023-2025">ROE: 16, 17.9, 21.25; ROA: 1.0, 1.3, 1.69; NIM: 2.8, 2.57, 2.59</canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- EPS TIMELINE -->
+  <div class="eps-wrap">
+    <div class="eps-hd">
+      <div class="eps-title">EPS Journey 2021–2026 (đ/CP)</div>
+      <div class="eps-badge">CAGR +15,7% / năm</div>
+    </div>
+    <div class="eps-track">
+      <div class="eps-node">
+        <div class="eps-dot d-peak"></div>
+        <div class="eps-v" style="color:var(--blue)">2.490đ</div>
+        <div class="eps-y">2021</div>
+        <div class="eps-note">Nền cao</div>
+      </div>
+      <div class="eps-node">
+        <div class="eps-dot d-n"></div>
+        <div class="eps-v">2.750đ</div>
+        <div class="eps-y">2022</div>
+        <div class="eps-note">Ổn định</div>
+      </div>
+      <div class="eps-node">
+        <div class="eps-dot d-mid"></div>
+        <div class="eps-v" style="color:var(--amber)">2.960đ</div>
+        <div class="eps-y">2023</div>
+        <div class="eps-note">Tích lũy</div>
+      </div>
+      <div class="eps-node">
+        <div class="eps-dot d-mid"></div>
+        <div class="eps-v" style="color:var(--amber)">3.270đ</div>
+        <div class="eps-y">2024 (KT)</div>
+        <div class="eps-note">+10,5%</div>
+      </div>
+      <div class="eps-node">
+        <div class="eps-dot d-now"></div>
+        <div class="eps-v" style="color:var(--green)">4.470đ</div>
+        <div class="eps-y">2025 (KT)</div>
+        <div class="eps-note">+36,6% ★</div>
+      </div>
+      <div class="eps-node">
+        <div class="eps-dot d-fwd"></div>
+        <div class="eps-v" style="color:var(--purple)">~4.930đ</div>
+        <div class="eps-y">2026 (F)</div>
+        <div class="eps-note">+10–12%</div>
+      </div>
+    </div>
+    <div class="eps-legend">
+      <div class="el"><div class="el-dot" style="background:var(--blue)"></div>Đỉnh lịch sử</div>
+      <div class="el"><div class="el-dot" style="background:var(--amber)"></div>Tích lũy</div>
+      <div class="el"><div class="el-dot" style="background:var(--green)"></div>Hiện tại (KT)</div>
+      <div class="el"><div class="el-dot" style="background:var(--purple)"></div>Dự phóng</div>
+    </div>
+  </div>
+
+  <!-- METRIC TABLE -->
+  <div class="mtbl-wrap">
+    <div class="mtbl-hd">
+      <div class="card-ey">Banking KPIs</div>
+      <div class="card-hd" style="margin-bottom:0">Chỉ tiêu tài chính đặc thù ngân hàng</div>
+    </div>
+    <table class="mtbl">
+      <thead><tr>
+        <th>Chỉ tiêu</th><th>Giá trị</th><th>Nhận xét</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Tổng tài sản 2025</td><td class="inf">2.768 nghìn tỷ</td><td>+16% YoY · Đỉnh lịch sử</td></tr>
+        <tr><td>Dư nợ cho vay</td><td class="inf">1.992 nghìn tỷ</td><td>+15,7% · Cả DN & bán lẻ</td></tr>
+        <tr><td>EPS 2025</td><td class="v">~4.470đ/CP</td><td>+36,6% YoY — dự phòng giảm</td></tr>
+        <tr><td>P/E @ 35.650đ</td><td class="pos">~8,0×</td><td>Hấp dẫn cho Top 2 lợi nhuận</td></tr>
+        <tr><td>P/B</td><td class="pos">~1,3–1,4×</td><td>Thấp hơn TB ngành ~1,6×</td></tr>
+        <tr><td>CASA / Tổng huy động</td><td class="pos">25,5% (+0,7đ%)</td><td>Chi phí vốn thấp nhất nhóm</td></tr>
+        <tr><td>Bao phủ nợ xấu (LLCR)</td><td class="pos">158,8%</td><td>Top 2 toàn hệ thống</td></tr>
+        <tr><td>Vốn điều lệ</td><td class="inf">77.670 tỷ (+62%)</td><td>Sau đề án. Tiếp tục tăng 2026</td></tr>
+        <tr><td>Cổ đông lớn</td><td class="warn">Nhà nước 64,46%</td><td>+ MUFG 19,73% = 84,19%</td></tr>
+        <tr><td>Room nước ngoài</td><td class="warn">Gần đầy</td><td>&lt;1% còn lại — hạn chế dòng ngoại</td></tr>
+        <tr><td>Kiểm toán</td><td class="pos">Deloitte VN (Big 4)</td><td>Uy tín cao nhất</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 5: PLAN 2026 -->
+<section>
+  <div class="sec-hd">
+    <div class="sec-ey">05 — Business Plan 2026</div>
+    <h2 class="sec-h">Kế hoạch 2026 — ĐHĐCĐ 24/04/2026</h2>
+    <p class="sec-p">Năm thu hoạch: tăng vốn, tín dụng, thu hồi nợ, mở rộng quốc tế.</p>
+  </div>
+  <div class="plan-g">
+    <div class="plan-c hi">
+      <div class="plan-l">LNST kế hoạch</div>
+      <div class="plan-v">38–40 nghìn tỷ</div>
+      <div class="plan-delta">+10–15% YoY</div>
+      <div class="plan-note">Dự phòng tiếp tục cải thiện</div>
+    </div>
+    <div class="plan-c hi">
+      <div class="plan-l">Tăng trưởng tín dụng</div>
+      <div class="plan-v">~17%</div>
+      <div class="plan-delta">+2.340 nghìn tỷ</div>
+      <div class="plan-note">FDI + bán lẻ + tư nhân</div>
+    </div>
+    <div class="plan-c hi">
+      <div class="plan-l">Vốn điều lệ mục tiêu</div>
+      <div class="plan-v">&gt;100.000 tỷ</div>
+      <div class="plan-delta">Top 3 hệ thống</div>
+      <div class="plan-note">16.200 tỷ + phương án chờ duyệt</div>
+    </div>
+    <div class="plan-c">
+      <div class="plan-l">Thu hồi nợ xấu</div>
+      <div class="plan-v">~10.000 tỷ</div>
+      <div class="plan-delta">= 2025 thực hiện</div>
+      <div class="plan-note">Non-interest income bổ sung</div>
+    </div>
+    <div class="plan-c">
+      <div class="plan-l">Tòa nhà VietinBank</div>
+      <div class="plan-v">H1/2026</div>
+      <div class="plan-delta" style="color:var(--blue)">Lợi nhuận one-off</div>
+      <div class="plan-note">Theo giá thị trường — chưa định giá</div>
+    </div>
+    <div class="plan-c">
+      <div class="plan-l">Mở rộng quốc tế</div>
+      <div class="plan-v">+5 VPĐD</div>
+      <div class="plan-delta n">VIFC + overseas</div>
+      <div class="plan-note">Kết nối FDI dài hạn</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 6: VALUATION -->
+<section id="valuation">
+  <div class="sec-hd">
+    <div class="sec-ey">06 — Valuation & Conclusion</div>
+    <h2 class="sec-h">Định giá & Kết luận đầu tư</h2>
+    <p class="sec-p">Đa phương pháp đồng thuận: P/E, P/B, thu nhập thặng dư, consensus analyst.</p>
+  </div>
+
+  <!-- PRICE RANGE -->
+  <div class="price-wrap">
+    <div class="price-hd">
+      <div class="pt-title">Dải giá tham chiếu (đ/CP)</div>
+      <div class="pt-date">25/04/2026</div>
+    </div>
+    <div class="pt-body">
+      <div class="pt-bar">
+        <div class="pt-fill"></div>
+        <div class="pt-dot pt-cur"></div>
+        <div class="pt-dot pt-tgt"></div>
+      </div>
+      <div class="pt-lbls">
+        <span>30.000đ (Stop)</span>
+        <span>35.650đ (Hiện tại)</span>
+        <span>52.000đ (Target max)</span>
+      </div>
+    </div>
+    <div class="pt-stats">
+      <div class="pts"><div class="pts-v" style="color:var(--cyan)">35.650đ</div><div class="pts-l">Giá hiện tại</div></div>
+      <div class="pts"><div class="pts-v" style="color:var(--green)">44.400đ</div><div class="pts-l">Target cơ sở</div></div>
+      <div class="pts"><div class="pts-v" style="color:var(--green)">+25%</div><div class="pts-l">Upside trung bình</div></div>
+    </div>
+  </div>
+
+  <!-- VAL CARDS -->
+  <div class="val-g">
+    <div class="vc">
+      <div class="vc-m">P/B Thận trọng<br>BV 26k × 1,4×</div>
+      <div class="vc-p">36.400đ</div>
+      <div class="vc-u">+2%</div>
+      <div class="vc-b">Kịch bản thận trọng</div>
+    </div>
+    <div class="vc feat">
+      <div class="vc-m">P/E 2026 Cơ sở<br>EPS 4.930đ × 9×</div>
+      <div class="vc-p">44.400đ</div>
+      <div class="vc-u">+25%</div>
+      <div class="vc-b">Fair value ↑</div>
+    </div>
+    <div class="vc">
+      <div class="vc-m">NHSV Research<br>Residual Income</div>
+      <div class="vc-p">46.600đ</div>
+      <div class="vc-u">+31%</div>
+      <div class="vc-b">Q3/2025 report</div>
+    </div>
+    <div class="vc">
+      <div class="vc-m">P/E 2026 Tích cực<br>EPS 5.200đ × 10×</div>
+      <div class="vc-p">52.000đ</div>
+      <div class="vc-u">+46%</div>
+      <div class="vc-b">Bull case</div>
+    </div>
+  </div>
+
+  <!-- RISKS -->
+  <div style="margin-bottom:22px">
+    <h3 style="font-size:.875rem;font-weight:700;color:var(--text);margin-bottom:14px">Rủi ro cần theo dõi</h3>
+    <div class="risks">
+      <div class="risk-item"><span class="rbadge rh">CAO</span>
+        <div><div class="risk-title">Tăng vốn chưa hoàn thành — áp lực vốn vẫn còn</div>
+        <div class="risk-desc">Chưa phát hành riêng lẻ cho nhà đầu tư chiến lược mới. NIM còn thấp hơn ngân hàng tư nhân. CAR cần cải thiện trước khi đẩy mạnh tín dụng.</div></div>
+      </div>
+      <div class="risk-item"><span class="rbadge rm">TRUNG</span>
+        <div><div class="risk-title">NIM chịu áp lực lãi suất huy động</div>
+        <div class="risk-desc">NIM chỉ tăng 3bps 2025. Lãi suất huy động tăng do thanh khoản và tỷ giá → biên lợi nhuận khó mở rộng mạnh ngắn hạn.</div></div>
+      </div>
+      <div class="risk-item"><span class="rbadge rm">TRUNG</span>
+        <div><div class="risk-title">Nợ xấu BĐS tiềm ẩn — NHNN hạn chế tín dụng đầu cơ</div>
+        <div class="risk-desc">BĐS chiếm tỷ trọng đáng kể trong danh mục cho vay. Định hướng NHNN 2026 hạn chế tín dụng BĐS đầu cơ → rủi ro nợ xấu nhóm này.</div></div>
+      </div>
+      <div class="risk-item"><span class="rbadge rl">THẤP</span>
+        <div><div class="risk-title">Room nước ngoài gần đầy — hạn chế dòng vốn tổ chức</div>
+        <div class="risk-desc">MUFG 19,73% + Nhà nước 64,46% → room ngoại &lt;1%. Hạn chế dòng vốn từ quỹ ngoại mới. Pha loãng EPS 7–8% từ phát hành cổ phiếu.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DCA ACTION -->
+  <div class="dca-box">
+    <div class="dca-hd">
+      <div class="dca-icon">▲</div>
+      <div>
+        <div class="dca-title">Hành động: Gia tăng tỷ trọng (DCA)</div>
+        <div class="dca-sub">Chiến lược mua phân kỳ — quản lý rủi ro pha loãng ngắn hạn</div>
+      </div>
+    </div>
+    <div class="dca-grid">
+      <div class="dca-item"><div class="dca-bul"></div><div class="dca-txt"><strong>Forward P/E 7,2× cực hấp dẫn:</strong> Top 2 lợi nhuận, ROE 21,25% nhưng định giá như cổ phiếu bình thường.</div></div>
+      <div class="dca-item"><div class="dca-bul"></div><div class="dca-txt"><strong>DCA 3–4 đợt:</strong> Vùng 33.000–37.000đ. Trailing stop nếu phá 30.000đ.</div></div>
+      <div class="dca-item"><div class="dca-bul"></div><div class="dca-txt"><strong>Dự phòng giảm = LN tăng không cần tăng DT:</strong> 17.300 tỷ dự phòng → xu hướng tiếp tục 2026.</div></div>
+      <div class="dca-item"><div class="dca-bul"></div><div class="dca-txt"><strong>Review mua thêm:</strong> LNTT Q2/2026 ≥ 11.000 tỷ + Tòa nhà CTG hoàn thành.</div></div>
+      <div class="dca-item"><div class="dca-bul"></div><div class="dca-txt"><strong>MUFG + Nhà nước = vốn rẻ nhất:</strong> CASA 25,5% → NIM cải thiện bền vững.</div></div>
+      <div class="dca-item"><div class="dca-bul"></div><div class="dca-txt"><strong>Chốt lời một phần:</strong> Giá vượt 46.000đ (P/E ~9,3×) → giảm 20–30% tỷ trọng.</div></div>
+    </div>
+  </div>
+
+  <div class="sig-g">
+    <div class="sig-c">
+      <div class="sig-v" style="color:var(--green)">7,2×</div>
+      <div class="sig-l">Forward P/E 2026<br><span>Rất hấp dẫn vs ROE 21%</span></div>
+    </div>
+    <div class="sig-c">
+      <div class="sig-v" style="color:var(--cyan)">84,19%</div>
+      <div class="sig-l">Cổ đông Nhà nước + MUFG<br><span>Nền tảng vốn ổn định nhất</span></div>
+    </div>
+    <div class="sig-c">
+      <div class="sig-v" style="color:var(--blue)">+36,8%</div>
+      <div class="sig-l">LNTT tăng trưởng 2025<br><span>Dự phòng giảm — catalyst chính</span></div>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="ft-top">
+      <div>
+        <div class="ft-name">NGÂN HÀNG TMCP VIETINBANK — CTG</div>
+        <div class="ft-sub">HOSE: CTG · Kiểm toán Deloitte VN · Cập nhật 25/04/2026</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3)">Phân tích độc lập · Không phải tư vấn đầu tư</div>
+    </div>
+    <p class="ft-disc">
+      Báo cáo này được tổng hợp từ dữ liệu công khai, BCTC kiểm toán của VietinBank (Deloitte Việt Nam) và các nguồn: CafeF · Vietstock · investor.vietinbank.vn · Fireant · 24HMoney · SimplyWallSt. Báo cáo chỉ mang tính tham khảo và <strong style="color:var(--text2)">KHÔNG PHẢI tư vấn đầu tư chính thức</strong>. Nhà đầu tư cần tự nghiên cứu và chịu trách nhiệm với quyết định của mình. Đầu tư có rủi ro. Các dự phóng có thể không chính xác.
+    </p>
+  </div>
+</footer>
+
+<script>
+// ══ CHART.JS ══
+const dk = '#1E2536', grd = 'rgba(255,255,255,.04)', tk = '#555E73';
+
+// Income chart
+new Chart(document.getElementById('incChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2023', '2024', '2025'],
+    datasets: [
+      { label: 'Thu nhập HĐ', data: [75, 81.9, 87.3], backgroundColor: ['rgba(59,130,246,.4)','rgba(59,130,246,.6)','#3B82F6'], borderRadius: 4 },
+      { label: 'LNTT', data: [23, 31.7, 43.4], backgroundColor: ['rgba(34,197,94,.4)','rgba(34,197,94,.6)','#22C55E'], borderRadius: 4 },
+      { label: 'CP Dự phòng', data: [28, 27.6, 17.3], backgroundColor: ['rgba(245,158,11,.4)','rgba(245,158,11,.6)','#F59E0B'], borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { ticks: { color: tk, font: { size: 10 }, callback: v => v + 'k' }, grid: { color: grd } },
+      x: { ticks: { color: tk, font: { size: 11 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Efficiency chart
+new Chart(document.getElementById('effChart'), {
+  type: 'line',
+  data: {
+    labels: ['2023', '2024', '2025'],
+    datasets: [
+      { label: 'ROE', data: [16, 17.9, 21.25], borderColor: '#22D3EE', backgroundColor: 'rgba(34,211,238,.06)', tension: .4, fill: true, pointRadius: 5, pointBackgroundColor: '#22D3EE', borderWidth: 2 },
+      { label: 'ROA', data: [1.0, 1.3, 1.69], borderColor: '#A78BFA', backgroundColor: 'rgba(167,139,250,.06)', tension: .4, fill: true, pointRadius: 5, pointBackgroundColor: '#A78BFA', borderWidth: 2, borderDash: [5,3] },
+      { label: 'NIM', data: [2.8, 2.57, 2.59], borderColor: '#F59E0B', backgroundColor: 'transparent', tension: .4, pointRadius: 5, pointBackgroundColor: '#F59E0B', borderWidth: 2, borderDash: [2,3] }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 0, max: 25, ticks: { color: tk, font: { size: 10 }, callback: v => v + '%' }, grid: { color: grd } },
+      x: { ticks: { color: tk, font: { size: 11 } }, grid: { display: false } }
+    }
+  }
+});
+
+// ══ SCROLL ANIMATION ══
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }, i * 55);
+  });
+}, { threshold: 0.07 });
+
+document.querySelectorAll('.cat, .moat-card, .plan-c, .vc, .risk-item, .gauge, .phase-chip').forEach(el => {
+  el.style.cssText += 'opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease';
+  io.observe(el);
+});
+
+// ══ NAV ACTIVE ══
+const secs = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  links.forEach(a => {
+    const on = a.getAttribute('href') === '#' + cur;
+    a.classList.toggle('on', on);
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

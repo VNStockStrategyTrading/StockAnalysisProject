@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HPG Investment Thesis 2026 — Tập đoàn Hòa Phát</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+/* ── RESET & BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',Roboto,Helvetica,Arial,sans-serif;background:#F5F6F8;color:#1A2B45;-webkit-font-smoothing:antialiased}
+
+/* ── TOKENS ── */
+:root{
+  --red:#C0392B;--red-light:#FDECEA;--red-mid:#E74C3C;
+  --navy:#0D2240;--navy2:#1A3558;--navy3:#1E4080;
+  --blue:#2563EB;--blue-light:#EBF2FF;--blue-mid:#3B82F6;
+  --steel:#4A6FA5;
+  --green:#16A34A;--green-light:#F0FDF4;--green-mid:#22C55E;
+  --amber:#D97706;--amber-light:#FFFBEB;
+  --gray1:#F5F6F8;--gray2:#EEF0F3;--gray3:#D1D5DB;--gray4:#9CA3AF;--gray5:#6B7280;
+  --white:#FFFFFF;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.05);
+  --shadow-lg:0 10px 30px rgba(0,0,0,.1);
+  --radius-sm:4px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;
+  --transition:all .2s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--navy);border-bottom:2px solid var(--red)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:32px;height:32px;background:var(--red);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;letter-spacing:.02em}
+.nav-name{font-size:14px;font-weight:600;color:#fff;letter-spacing:.02em}
+.nav-badge{font-size:11px;color:#94A3B8;padding:2px 8px;border:1px solid rgba(255,255,255,.15);border-radius:20px}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{font-size:12px;font-weight:500;color:#94A3B8;text-decoration:none;letter-spacing:.04em;text-transform:uppercase;transition:var(--transition)}
+.nav-links a:hover{color:#fff}
+.nav-cta{background:var(--red);color:#fff;font-size:12px;font-weight:600;padding:6px 16px;border-radius:4px;text-decoration:none;letter-spacing:.04em;transition:var(--transition)}
+.nav-cta:hover{background:#A93226}
+
+/* ── WRAPPER ── */
+.page{max-width:1200px;margin:0 auto;padding:0 2rem}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);padding:64px 0 48px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-100px;top:-100px;width:500px;height:500px;border-radius:50%;background:rgba(37,99,235,.08);pointer-events:none}
+.hero::after{content:'';position:absolute;left:-80px;bottom:-80px;width:320px;height:320px;border-radius:50%;background:rgba(192,57,43,.06);pointer-events:none}
+.hero-inner{max-width:1200px;margin:0 auto;padding:0 2rem;position:relative;z-index:1}
+.hero-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.eyebrow-line{width:32px;height:2px;background:var(--red)}
+.eyebrow-text{font-size:11px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.12em;text-transform:uppercase}
+.hero-title{font-size:clamp(2rem,4vw,3.25rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:8px}
+.hero-title .accent{color:#EF9A9A}
+.hero-subtitle{font-size:1rem;color:rgba(255,255,255,.65);margin-bottom:32px;max-width:600px;line-height:1.6;font-weight:300}
+.hero-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:40px}
+.meta-tag{font-size:11px;font-weight:500;color:rgba(255,255,255,.5);background:rgba(255,255,255,.07);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.1)}
+.hero-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:16px 18px;backdrop-filter:blur(4px);transition:var(--transition)}
+.kpi-card:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.kpi-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.kpi-value{font-size:1.6rem;font-weight:700;color:#fff;line-height:1;margin-bottom:4px}
+.kpi-value.positive{color:#86EFAC}
+.kpi-note{font-size:10px;color:rgba(255,255,255,.45);line-height:1.3}
+
+/* ── VERDICT BANNER ── */
+.verdict-banner{background:var(--green);padding:14px 0}
+.verdict-inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.verdict-text{display:flex;align-items:center;gap:12px}
+.verdict-icon{width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+.verdict-label{font-size:13px;font-weight:700;color:#fff;letter-spacing:.02em}
+.verdict-sub{font-size:12px;color:rgba(255,255,255,.8)}
+.verdict-targets{display:flex;gap:20px}
+.vt-item{text-align:center}
+.vt-val{font-size:16px;font-weight:700;color:#fff}
+.vt-lbl{font-size:10px;color:rgba(255,255,255,.7);letter-spacing:.04em;text-transform:uppercase}
+
+/* ── SECTION ── */
+section{padding:56px 0}
+.section-header{margin-bottom:32px}
+.section-eyebrow{font-size:11px;font-weight:600;color:var(--red);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.section-title{font-size:1.625rem;font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.2}
+.section-lead{font-size:.9375rem;color:var(--gray5);line-height:1.6;max-width:640px}
+.divider{border:none;border-top:1px solid var(--gray3);margin:0}
+
+/* ── STORY BLOCK ── */
+.story-block{background:var(--white);border-radius:var(--radius-xl);border-left:4px solid var(--navy3);padding:24px 28px;box-shadow:var(--shadow-sm);margin-bottom:32px}
+.story-quote{font-size:1.0625rem;color:var(--navy);line-height:1.75;font-weight:400}
+.story-quote strong{color:var(--red);font-weight:600}
+
+/* ── CATALYST CARDS ── */
+.catalysts{display:flex;flex-direction:column;gap:12px}
+.catalyst-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray3);padding:20px 24px;display:grid;grid-template-columns:48px 1fr;gap:16px;align-items:start;box-shadow:var(--shadow-sm);transition:var(--transition);cursor:default}
+.catalyst-card:hover{border-color:var(--blue-mid);box-shadow:var(--shadow-md);transform:translateX(4px)}
+.cat-number{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cat-content{}
+.cat-title{font-size:.9375rem;font-weight:600;color:var(--navy);margin-bottom:4px;line-height:1.3}
+.cat-desc{font-size:.8125rem;color:var(--gray5);line-height:1.55}
+.cat-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;margin-top:6px}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-amber{background:var(--amber-light);color:var(--amber)}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-navy{background:#EBF2FF;color:var(--navy3)}
+
+/* ── PHASE TAGS ── */
+.phase-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px}
+.phase-card{background:var(--white);border-radius:var(--radius-lg);padding:20px;border:1px solid var(--gray3);box-shadow:var(--shadow-sm)}
+.phase-title{font-size:10px;font-weight:600;color:var(--gray4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.phase-val{font-size:.875rem;font-weight:700;color:var(--navy)}
+.phase-note{font-size:.75rem;color:var(--gray5);margin-top:4px;line-height:1.4}
+
+/* ── MOAT GRID ── */
+.moat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.moat-card{background:var(--white);border-radius:var(--radius-lg);padding:20px 22px;border:1px solid var(--gray3);box-shadow:var(--shadow-sm);display:flex;gap:14px;transition:var(--transition)}
+.moat-card:hover{border-color:var(--navy3);box-shadow:var(--shadow-md)}
+.moat-icon{width:40px;height:40px;border-radius:var(--radius-md);background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.moat-title{font-size:.875rem;font-weight:600;color:var(--navy);margin-bottom:4px}
+.moat-desc{font-size:.78125rem;color:var(--gray5);line-height:1.5}
+
+/* ── CHARTS LAYOUT ── */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.chart-card{background:var(--white);border-radius:var(--radius-lg);padding:22px 24px;border:1px solid var(--gray3);box-shadow:var(--shadow-sm)}
+.chart-card.full{grid-column:1/-1}
+.chart-label{font-size:11px;font-weight:600;color:var(--gray4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.chart-title{font-size:.9375rem;font-weight:600;color:var(--navy);margin-bottom:16px}
+.chart-wrap{position:relative;width:100%}
+
+/* ── METRIC TABLE ── */
+.metric-table{width:100%;border-collapse:collapse;font-size:.8125rem}
+.metric-table thead tr{background:var(--navy);color:#fff}
+.metric-table thead th{padding:10px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.metric-table tbody tr{border-bottom:1px solid var(--gray2);transition:background .15s}
+.metric-table tbody tr:hover{background:var(--gray1)}
+.metric-table tbody tr:last-child{border-bottom:none}
+.metric-table td{padding:10px 14px;vertical-align:top;color:var(--navy);line-height:1.4}
+.metric-table td:first-child{color:var(--gray5)}
+.metric-table td.val{font-weight:600;font-size:.875rem}
+.metric-table td.positive{color:var(--green);font-weight:600}
+.metric-table td.negative{color:var(--red-mid);font-weight:600}
+.metric-table td.info{color:var(--navy3);font-weight:600}
+.metric-table td.amber{color:var(--amber);font-weight:600}
+
+/* ── EPS TIMELINE ── */
+.eps-timeline{display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative}
+.eps-timeline::before{content:'';position:absolute;top:28px;left:24px;right:24px;height:2px;background:var(--gray3);z-index:0}
+.eps-item{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+.eps-dot{width:14px;height:14px;border-radius:50%;background:var(--gray3);border:2.5px solid var(--white);margin-bottom:8px;flex-shrink:0}
+.eps-dot.peak{background:var(--blue);box-shadow:0 0 0 4px var(--blue-light)}
+.eps-dot.low{background:var(--red-mid);box-shadow:0 0 0 4px var(--red-light)}
+.eps-dot.current{background:var(--green);box-shadow:0 0 0 4px var(--green-light)}
+.eps-dot.forecast{background:var(--amber);box-shadow:0 0 0 4px var(--amber-light)}
+.eps-val{font-size:.8125rem;font-weight:700;color:var(--navy);margin-bottom:2px}
+.eps-year{font-size:.6875rem;color:var(--gray4);font-weight:500}
+.eps-label{font-size:.625rem;color:var(--gray4);margin-top:2px;text-align:center}
+
+/* ── 2026 PLAN ── */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.plan-card{background:var(--white);border-radius:var(--radius-lg);padding:18px 20px;border:1px solid var(--gray3);box-shadow:var(--shadow-sm)}
+.plan-card.highlight{border-color:var(--green);background:var(--green-light)}
+.plan-card.highlight .plan-val{color:var(--green)}
+.plan-metric{font-size:10px;font-weight:600;color:var(--gray4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.plan-val{font-size:1.375rem;font-weight:700;color:var(--navy);margin-bottom:2px;line-height:1.1}
+.plan-vs{font-size:.75rem;color:var(--green);font-weight:600}
+.plan-vs.neutral{color:var(--gray4)}
+.plan-note{font-size:.71875rem;color:var(--gray5);margin-top:4px;line-height:1.3}
+
+/* ── RISK LIST ── */
+.risk-list{display:flex;flex-direction:column;gap:10px}
+.risk-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);border-radius:var(--radius-md);padding:14px 16px;border:1px solid var(--gray3);box-shadow:var(--shadow-sm)}
+.risk-level{flex-shrink:0;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.05em}
+.risk-high{background:var(--red-light);color:var(--red)}
+.risk-med{background:var(--amber-light);color:var(--amber)}
+.risk-low{background:var(--green-light);color:var(--green)}
+.risk-content{}
+.risk-title{font-size:.8125rem;font-weight:600;color:var(--navy);margin-bottom:2px}
+.risk-desc{font-size:.75rem;color:var(--gray5);line-height:1.5}
+
+/* ── VALUATION TABLE ── */
+.val-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.val-card{background:var(--white);border-radius:var(--radius-lg);padding:18px 16px;border:1px solid var(--gray3);text-align:center;box-shadow:var(--shadow-sm);transition:var(--transition)}
+.val-card:hover{border-color:var(--blue-mid);box-shadow:var(--shadow-md)}
+.val-card.base{border-color:var(--navy3);background:var(--blue-light)}
+.val-method{font-size:.6875rem;color:var(--gray4);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;line-height:1.3}
+.val-price{font-size:1.375rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.val-upside{font-size:.875rem;font-weight:700;color:var(--green)}
+.val-by{font-size:.6875rem;color:var(--gray4);margin-top:4px}
+
+/* ── PRICE RANGE VIZ ── */
+.price-range-wrap{background:var(--white);border-radius:var(--radius-lg);padding:24px;border:1px solid var(--gray3);box-shadow:var(--shadow-sm);margin-bottom:24px}
+.pr-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px}
+.pr-title{font-size:.9375rem;font-weight:600;color:var(--navy)}
+.pr-updated{font-size:.71875rem;color:var(--gray4)}
+.pr-track{position:relative;height:8px;background:var(--gray2);border-radius:4px;margin-bottom:12px}
+.pr-fill{position:absolute;left:0;top:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--navy3),var(--blue-mid))}
+.pr-dot{position:absolute;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;border:2.5px solid var(--white);box-shadow:0 0 0 3px rgba(0,0,0,.15)}
+.pr-dot.current{background:var(--blue-mid)}
+.pr-dot.target{background:var(--green)}
+.pr-labels{display:flex;justify-content:space-between;font-size:.6875rem;color:var(--gray4)}
+.pr-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+.pr-stat{text-align:center}
+.pr-stat-val{font-size:1.0625rem;font-weight:700;color:var(--navy)}
+.pr-stat-lbl{font-size:.6875rem;color:var(--gray4);letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+
+/* ── DCA STRATEGY ── */
+.dca-box{background:var(--green-light);border:1px solid #86EFAC;border-radius:var(--radius-xl);padding:24px 28px;margin-bottom:24px}
+.dca-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.dca-icon{width:36px;height:36px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;flex-shrink:0}
+.dca-title{font-size:1.0625rem;font-weight:700;color:var(--green)}
+.dca-subtitle{font-size:.8125rem;color:#166534}
+.dca-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.dca-item{display:flex;gap:10px;align-items:flex-start}
+.dca-bullet{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:5px}
+.dca-text{font-size:.8125rem;color:#166534;line-height:1.5}
+.dca-text strong{font-weight:600;color:#14532D}
+
+/* ── SCATTER ROW ── */
+.signal-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
+.signal-card{background:var(--white);border-radius:var(--radius-lg);padding:16px 18px;border:1px solid var(--gray3);box-shadow:var(--shadow-sm)}
+.signal-val{font-size:1.375rem;font-weight:700;margin-bottom:2px}
+.signal-lbl{font-size:.71875rem;color:var(--gray5);line-height:1.4}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);padding:32px 0 24px;margin-top:40px}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 2rem}
+.footer-disclaimer{font-size:.71875rem;color:rgba(255,255,255,.4);line-height:1.7;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;margin-top:20px}
+
+/* ── SCROLL ANIMATION ── */
+.fade-up{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero-kpis,.chart-row,.phase-row,.moat-grid,.val-cards,.plan-grid{grid-template-columns:1fr 1fr}
+  .eps-timeline{grid-template-columns:repeat(3,1fr);gap:16px}
+  .eps-timeline::before{display:none}
+  .nav-links{display:none}
+  .verdict-targets{display:none}
+}
+@media(max-width:600px){
+  .hero-kpis,.chart-row,.moat-grid,.val-cards,.plan-grid,.signal-row,.dca-grid{grid-template-columns:1fr}
+  .phase-row{grid-template-columns:1fr}
+  .chart-card.full{grid-column:1}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">HPG</div>
+      <div>
+        <div class="nav-name">TẬP ĐOÀN HÒA PHÁT</div>
+      </div>
+      <div class="nav-badge">HOSE: HPG</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#thesis">Thesis</a></li>
+      <li><a href="#catalysts">Catalyst</a></li>
+      <li><a href="#moat">Lợi thế</a></li>
+      <li><a href="#financials">Tài chính</a></li>
+      <li><a href="#valuation">Định giá</a></li>
+    </ul>
+    <a href="#valuation" class="nav-cta">Kết luận ↓</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Báo cáo phân tích đầu tư · Cập nhật 25/04/2026</span>
+    </div>
+    <h1 class="hero-title">
+      Giai đoạn <span class="accent">"Thu Hoạch"</span><br>của Thép Việt Nam
+    </h1>
+    <p class="hero-subtitle">Hòa Phát bước vào chu kỳ tăng tốc lợi nhuận sau 5 năm đầu tư lớn. Dung Quất 2 + Đầu tư công + Thép ray cao tốc — ba lực đẩy chưa từng có hội tụ trong một cổ phiếu.</p>
+    <div class="hero-meta">
+      <span class="meta-tag">Ngành: Sản xuất Thép</span>
+      <span class="meta-tag">Kiểm toán: KPMG Việt Nam</span>
+      <span class="meta-tag">BCTC 2023–2025</span>
+      <span class="meta-tag">Nhóm: Chu kỳ + Tăng trưởng nhanh</span>
+    </div>
+    <div class="hero-kpis">
+      <div class="kpi-card">
+        <div class="kpi-label">Giá đóng cửa 24/04</div>
+        <div class="kpi-value">27.900<span style="font-size:1rem;font-weight:400">đ</span></div>
+        <div class="kpi-note">Vốn hoá ~214.145 tỷ VNĐ</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">EPS 2025 (Trailing)</div>
+        <div class="kpi-value positive">~2.040<span style="font-size:1rem;font-weight:400">đ</span></div>
+        <div class="kpi-note">LNST 15.515 tỷ / 7,61 tỷ CP</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Forward P/E 2026</div>
+        <div class="kpi-value positive">9,7<span style="font-size:1rem;font-weight:400">×</span></div>
+        <div class="kpi-note">LN kế hoạch +42% → rất hấp dẫn</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Giá mục tiêu TB</div>
+        <div class="kpi-value positive">33–38<span style="font-size:1rem;font-weight:400">k</span></div>
+        <div class="kpi-note">Upside +18% đến +38%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT BANNER -->
+<div class="verdict-banner" role="alert" aria-label="Khuyến nghị đầu tư">
+  <div class="verdict-inner">
+    <div class="verdict-text">
+      <div class="verdict-icon">▲</div>
+      <div>
+        <div class="verdict-label">KHUYẾN NGHỊ: GIA TĂNG TỶ TRỌNG</div>
+        <div class="verdict-sub">Mua phân kỳ (DCA) · Vùng 26.000–29.000đ · Trailing stop 24.000đ</div>
+      </div>
+    </div>
+    <div class="verdict-targets">
+      <div class="vt-item"><div class="vt-val">+35%</div><div class="vt-lbl">Target cơ sở</div></div>
+      <div class="vt-item"><div class="vt-val">+38%</div><div class="vt-lbl">Target tích cực</div></div>
+      <div class="vt-item"><div class="vt-val">1,8%</div><div class="vt-lbl">Div. Yield</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- SECTION 1: THESIS -->
+<section id="thesis">
+  <div class="section-header fade-up">
+    <div class="section-eyebrow">01 — Investment Thesis</div>
+    <h2 class="section-title">Câu chuyện đầu tư cốt lõi</h2>
+    <p class="section-lead">Tại sao HPG lúc này? — Luận điểm đơn giản, dữ liệu cụ thể.</p>
+  </div>
+  <div class="story-block fade-up">
+    <p class="story-quote">
+      Hòa Phát đang bước vào giai đoạn <strong>"thu hoạch"</strong> sau 5 năm đầu tư tốn kém. Dung Quất 2 vận hành đầy đủ nâng công suất lên <strong>16 triệu tấn/năm</strong>, trong khi đầu tư công 3,8 triệu tỷ &amp; đường sắt cao tốc Bắc–Nam tạo ra "cơn bão nhu cầu" thép chưa từng có. Hòa Phát là công ty <strong>DUY NHẤT ở Đông Nam Á</strong> sản xuất được thép ray cao tốc.
+    </p>
+  </div>
+  <div class="phase-row fade-up">
+    <div class="phase-card">
+      <div class="phase-title">Nhóm Peter Lynch</div>
+      <div class="phase-val">Chu kỳ + Tăng trưởng nhanh</div>
+      <div class="phase-note">Thép có tính chu kỳ. Nhưng DQ2 & thép ray tạo tầng tăng trưởng cấu trúc mới.</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-title">Giai đoạn hiện tại</div>
+      <div class="phase-val" style="color:var(--green)">Đầu → Giữa chu kỳ mới</div>
+      <div class="phase-note">Qua đáy 2022–2023. Đỉnh lợi nhuận dự kiến 2027–2028 khi DQ2 &amp; ray full công suất.</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-title">Dư địa tăng trưởng</div>
+      <div class="phase-val" style="color:var(--navy3)">Rất lớn (5–10 năm)</div>
+      <div class="phase-note">HRC 100% tự chủ, thép ray độc quyền ĐNA, xuất khẩu thép chất lượng cao.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 2: CATALYSTS -->
+<section id="catalysts">
+  <div class="section-header fade-up">
+    <div class="section-eyebrow">02 — Growth Catalysts</div>
+    <h2 class="section-title">5 Catalyst chính năm 2026</h2>
+    <p class="section-lead">Các yếu tố kích hoạt tăng trưởng đang hội tụ — từ nội tại đến vĩ mô.</p>
+  </div>
+  <div class="catalysts">
+    <div class="catalyst-card fade-up">
+      <div class="cat-number">1</div>
+      <div class="cat-content">
+        <div class="cat-title">Dung Quất 2 full công suất — 16 triệu tấn/năm</div>
+        <div class="cat-desc">Giai đoạn 2 hoàn thành tháng 9/2025. HRC 9 triệu tấn/năm — đáp ứng 100% nhu cầu Việt Nam. Dự án đóng góp thêm 80.000–100.000 tỷ/năm vào doanh thu khi vận hành đầy đủ.</div>
+        <span class="cat-badge badge-blue">DQ2 → 2028 full</span>
+        <span class="cat-badge badge-navy">+100% HRC vs 2024</span>
+      </div>
+    </div>
+    <div class="catalyst-card fade-up">
+      <div class="cat-number">2</div>
+      <div class="cat-content">
+        <div class="cat-title">Thép ray cao tốc — độc quyền Đông Nam Á</div>
+        <div class="cat-desc">Nhà máy 14.000 tỷ, công suất 700.000 tấn/năm. Công nghệ SMS Group (Đức). Lô ray đầu tiên Q1/2027 — trước khi đường sắt Bắc–Nam thu mua quy mô lớn. Không có đối thủ nào ở ĐNA trong 5 năm tới.</div>
+        <span class="cat-badge badge-red">Độc quyền ĐNA</span>
+        <span class="cat-badge badge-navy">700.000 tấn/năm</span>
+      </div>
+    </div>
+    <div class="catalyst-card fade-up">
+      <div class="cat-number">3</div>
+      <div class="cat-content">
+        <div class="cat-title">Đầu tư công 3,8 triệu tỷ — nhu cầu thép bùng nổ 2026–2030</div>
+        <div class="cat-desc">Chính phủ cam kết giải ngân 95%. Cao tốc, cảng Long Thành, đô thị hóa tạo nhu cầu thép khổng lồ. Thị trường nội địa tăng 38% năm 2025, chiếm 84% tổng doanh thu HPG.</div>
+        <span class="cat-badge badge-green">Nội địa +38% (2025)</span>
+        <span class="cat-badge badge-blue">84% tổng DT</span>
+      </div>
+    </div>
+    <div class="catalyst-card fade-up">
+      <div class="cat-number">4</div>
+      <div class="cat-content">
+        <div class="cat-title">Thuế chống bán phá giá HRC Trung Quốc 23–27,83%</div>
+        <div class="cat-desc">Bộ Công Thương áp thuế chính thức từ 6/7/2025, kéo dài 5 năm. Nhập khẩu HRC Trung Quốc giảm từ 68% xuống 57% thị phần. Bảo vệ biên lợi nhuận HPG trong trung hạn.</div>
+        <span class="cat-badge badge-amber">5 năm có hiệu lực</span>
+        <span class="cat-badge badge-green">Bảo vệ biên LN</span>
+      </div>
+    </div>
+    <div class="catalyst-card fade-up">
+      <div class="cat-number">5</div>
+      <div class="cat-content">
+        <div class="cat-title">LN 2026 kế hoạch 22.000 tỷ (+42%) — Q1 đột phá 9.056 tỷ</div>
+        <div class="cat-desc">Q1/2026: +170% YoY, hoàn thành 41% kế hoạch năm. Cổ tức tiền mặt trở lại sau 3 năm. Gia đình lãnh đạo mua thêm ~800 tỷ tháng 4/2026 — insider confidence mạnh.</div>
+        <span class="cat-badge badge-green">Q1/2026: +170% YoY</span>
+        <span class="cat-badge badge-navy">Insider mua 800 tỷ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 3: MOAT -->
+<section id="moat">
+  <div class="section-header fade-up">
+    <div class="section-eyebrow">03 — Competitive Moat</div>
+    <h2 class="section-title">Lợi thế cạnh tranh bền vững</h2>
+    <p class="section-lead">5 lớp bảo vệ khó sao chép — tạo ra biên lợi nhuận cải thiện liên tục.</p>
+  </div>
+  <div class="moat-grid fade-up">
+    <div class="moat-card">
+      <div class="moat-icon">🔗</div>
+      <div>
+        <div class="moat-title">Chuỗi sản xuất khép kín từ thượng nguồn</div>
+        <div class="moat-desc">Quặng sắt → than cốc → gang lỏng → thép. Chi phí thấp hơn đối thủ dùng thép phế 15–20%. Thiết bị G7. Duy nhất tại VN ở quy mô này.</div>
+      </div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-icon">🏆</div>
+      <div>
+        <div class="moat-title">Thị phần #1 Việt Nam & Top 30 thế giới</div>
+        <div class="moat-desc">Thép xây dựng 38%, ống thép 37%. 16 triệu tấn/năm = nhà sản xuất lớn nhất Đông Nam Á. Top 30 thế giới từ cuối 2025.</div>
+      </div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-icon">🛤️</div>
+      <div>
+        <div class="moat-title">Độc quyền thép ray cao tốc — duy nhất ĐNA</div>
+        <div class="moat-desc">Chỉ 2–3 hãng châu Âu đủ sức cung cấp công nghệ. Không đối thủ khu vực trong 5 năm tới. Rào cản gia nhập cực cao.</div>
+      </div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-icon">👔</div>
+      <div>
+        <div class="moat-title">Lãnh đạo cam kết — sở hữu 35,45%</div>
+        <div class="moat-desc">Gia đình ông Trần Đình Long mua thêm 800 tỷ tháng 4/2026. Cam kết tăng trưởng 15%/năm 2025–2030 với Thủ tướng. Lợi ích gắn chặt cổ đông.</div>
+      </div>
+    </div>
+    <div class="moat-card" style="grid-column:1/-1">
+      <div class="moat-icon">🌿</div>
+      <div>
+        <div class="moat-title">Hệ sinh thái đa ngành bổ trợ</div>
+        <div class="moat-desc">Thép (90% DT) + Nông nghiệp HPA (niêm yết HOSE 6/2/2026, LN +55%) + BĐS công nghiệp + Điện máy. Đa dạng hóa giảm rủi ro chu kỳ thép thuần túy. ERP-SAP, chuyển đổi số toàn bộ vận hành.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 4: FINANCIALS -->
+<section id="financials">
+  <div class="section-header fade-up">
+    <div class="section-eyebrow">04 — Financial Analysis</div>
+    <h2 class="section-title">Dữ liệu tài chính BCTC kiểm toán 2025</h2>
+    <p class="section-lead">Biên lợi nhuận cải thiện 3 năm liên tiếp — doanh thu tăng thực chất, không chỉ cắt chi phí.</p>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="chart-row fade-up">
+    <div class="chart-card">
+      <div class="chart-label">Revenue & Profit</div>
+      <div class="chart-title">Doanh thu & LNST 2023–2025 (nghìn tỷ đ)</div>
+      <div class="chart-wrap" style="height:200px">
+        <canvas id="revenueChart" role="img" aria-label="Doanh thu và lợi nhuận HPG 2023-2025"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-label">Margin Expansion</div>
+      <div class="chart-title">Biên lợi nhuận gộp & ròng (%)</div>
+      <div class="chart-wrap" style="height:200px">
+        <canvas id="marginChart" role="img" aria-label="Biên lợi nhuận HPG 2023-2025"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- EPS TIMELINE -->
+  <div class="chart-card fade-up" style="margin-bottom:20px">
+    <div class="chart-label">EPS Journey</div>
+    <div class="chart-title" style="margin-bottom:24px">Hành trình EPS 2021–2026 (đ/CP)</div>
+    <div class="eps-timeline">
+      <div class="eps-item">
+        <div class="eps-dot peak"></div>
+        <div class="eps-val" style="color:var(--blue)">4.500đ</div>
+        <div class="eps-year">2021</div>
+        <div class="eps-label">Đỉnh chu kỳ</div>
+      </div>
+      <div class="eps-item">
+        <div class="eps-dot low"></div>
+        <div class="eps-val" style="color:var(--red-mid)">800đ</div>
+        <div class="eps-year">2022</div>
+        <div class="eps-label">Đáy</div>
+      </div>
+      <div class="eps-item">
+        <div class="eps-dot" style="background:var(--gray4)"></div>
+        <div class="eps-val">920đ</div>
+        <div class="eps-year">2023</div>
+        <div class="eps-label">Phục hồi</div>
+      </div>
+      <div class="eps-item">
+        <div class="eps-dot" style="background:var(--steel)"></div>
+        <div class="eps-val">1.580đ</div>
+        <div class="eps-year">2024</div>
+        <div class="eps-label">Tăng tốc</div>
+      </div>
+      <div class="eps-item">
+        <div class="eps-dot current"></div>
+        <div class="eps-val" style="color:var(--green)">2.040đ</div>
+        <div class="eps-year">2025 (KT)</div>
+        <div class="eps-label">+29% YoY</div>
+      </div>
+      <div class="eps-item">
+        <div class="eps-dot forecast"></div>
+        <div class="eps-val" style="color:var(--amber)">~2.890đ</div>
+        <div class="eps-year">2026 (KH)</div>
+        <div class="eps-label">+42% YoY</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCIAL TABLE -->
+  <div class="chart-card fade-up" style="padding:0;overflow:hidden">
+    <div style="padding:18px 22px 12px">
+      <div class="chart-label">Balance Sheet & Valuation</div>
+      <div class="chart-title">Chỉ số tài chính & định giá chủ yếu</div>
+    </div>
+    <table class="metric-table">
+      <thead>
+        <tr>
+          <th>Chỉ tiêu</th>
+          <th>Giá trị</th>
+          <th>Nhận xét</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Doanh thu thuần 2025</td><td class="val">156.116 tỷ đ</td><td class="positive">+12,4% vs 2024 · Nội địa +38%</td></tr>
+        <tr><td>LNST hợp nhất 2025</td><td class="val">15.515 tỷ đ</td><td class="positive">+29% · Vượt KH 103%</td></tr>
+        <tr><td>EPS 2025 (trailing)</td><td class="info">~2.040 đ/CP</td><td>CAGR 3 năm: +36,6%/năm</td></tr>
+        <tr><td>P/E trailing @ 27.900đ</td><td class="val">~13,7×</td><td style="color:var(--gray5)">Hợp lý trong chu kỳ phục hồi</td></tr>
+        <tr><td>Forward P/E 2026</td><td class="positive">~9,7×</td><td class="positive">Rất hấp dẫn khi LN +42%</td></tr>
+        <tr><td>Nợ vay dài hạn / VCSH</td><td class="amber">~0,35–0,42×</td><td>Cấu trúc 50/50 — thận trọng</td></tr>
+        <tr><td>Tiền mặt ròng</td><td class="negative">Âm ~-27–32k tỷ</td><td style="color:var(--gray5)">Chấp nhận được — đầu tư tài sản sinh lời</td></tr>
+        <tr><td>Hàng tồn kho vs Doanh thu</td><td class="positive">HTK tăng chậm hơn DT</td><td class="positive">Vòng quay cải thiện — tín hiệu tốt</td></tr>
+        <tr><td>Quỹ ngoại sở hữu</td><td class="info">54 quỹ · 93,5M CP</td><td class="positive">Khối ngoại mua ròng ~4.965 tỷ / tháng</td></tr>
+        <tr><td>Q1/2026 LNST (thực tế)</td><td class="positive">9.056 tỷ đ</td><td class="positive">+170% YoY · Hoàn thành 41% KH năm</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 5: 2026 PLAN -->
+<section>
+  <div class="section-header fade-up">
+    <div class="section-eyebrow">05 — Business Plan 2026</div>
+    <h2 class="section-title">Kế hoạch 2026 — ĐHĐCĐ 21/04/2026</h2>
+    <p class="section-lead">Mục tiêu tham vọng nhất trong lịch sử Hòa Phát — và Q1/2026 đang đi đúng hướng.</p>
+  </div>
+  <div class="plan-grid fade-up">
+    <div class="plan-card highlight">
+      <div class="plan-metric">Lợi nhuận sau thuế</div>
+      <div class="plan-val">22.000 tỷ</div>
+      <div class="plan-vs">+42% vs 2025</div>
+      <div class="plan-note">Mục tiêu nội bộ BĐH: 23.000 tỷ</div>
+    </div>
+    <div class="plan-card highlight">
+      <div class="plan-metric">Tổng doanh thu</div>
+      <div class="plan-val">210.000 tỷ</div>
+      <div class="plan-vs">+33% vs 2025</div>
+      <div class="plan-note">Kỷ lục mới trong lịch sử tập đoàn</div>
+    </div>
+    <div class="plan-card highlight">
+      <div class="plan-metric">Sản lượng thép thô</div>
+      <div class="plan-val">16 triệu tấn</div>
+      <div class="plan-vs">Đỉnh lịch sử</div>
+      <div class="plan-note">Nhà sản xuất lớn nhất Đông Nam Á</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-metric">HRC Công suất</div>
+      <div class="plan-val">9 triệu tấn</div>
+      <div class="plan-vs">100% nhu cầu VN</div>
+      <div class="plan-note">+100% vs 2024 nhờ DQ2</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-metric">Thép ray cao tốc</div>
+      <div class="plan-val">Q1/2027</div>
+      <div class="plan-vs" style="color:var(--navy3)">Độc quyền ĐNA</div>
+      <div class="plan-note">700.000 tấn/năm · SMS Group Đức</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-metric">Cổ tức 2025</div>
+      <div class="plan-val">15%</div>
+      <div class="plan-vs" style="color:var(--navy3)">Tiền mặt trở lại</div>
+      <div class="plan-note">5% cash + 10% CP sau 3 năm gián đoạn</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 6: VALUATION -->
+<section id="valuation">
+  <div class="section-header fade-up">
+    <div class="section-eyebrow">06 — Valuation & Conclusion</div>
+    <h2 class="section-title">Định giá & Kết luận đầu tư</h2>
+    <p class="section-lead">Đa phương pháp — tất cả đều chỉ về một hướng: HPG đang được định giá thấp.</p>
+  </div>
+
+  <!-- PRICE RANGE -->
+  <div class="price-range-wrap fade-up">
+    <div class="pr-header">
+      <div class="pr-title">Biên độ giá tham chiếu (đ/CP)</div>
+      <div class="pr-updated">Cập nhật 25/04/2026</div>
+    </div>
+    <div style="position:relative;padding:0 2%">
+      <div class="pr-track">
+        <div class="pr-fill" style="width:47%"></div>
+        <div class="pr-dot current" style="left:calc(47% - 7px)"></div>
+        <div class="pr-dot target" style="right:-7px"></div>
+      </div>
+      <div class="pr-labels">
+        <span>24.000đ (Stop)</span>
+        <span style="text-align:center">27.900đ (Hiện tại)</span>
+        <span style="text-align:right">38.400đ (Target)</span>
+      </div>
+    </div>
+    <div class="pr-stats">
+      <div class="pr-stat"><div class="pr-stat-val" style="color:var(--blue)">27.900đ</div><div class="pr-stat-lbl">Giá hiện tại</div></div>
+      <div class="pr-stat"><div class="pr-stat-val" style="color:var(--green)">35.000đ</div><div class="pr-stat-lbl">Target cơ sở TB</div></div>
+      <div class="pr-stat"><div class="pr-stat-val" style="color:var(--green)">+26%</div><div class="pr-stat-lbl">Upside trung bình</div></div>
+    </div>
+  </div>
+
+  <!-- VAL CARDS -->
+  <div class="val-cards fade-up">
+    <div class="val-card">
+      <div class="val-method">P/E Thận trọng<br>EPS 2.890 × 11,5×</div>
+      <div class="val-price">33.200đ</div>
+      <div class="val-upside">+19%</div>
+      <div class="val-by">Kịch bản cơ sở</div>
+    </div>
+    <div class="val-card base">
+      <div class="val-method">P/E Cơ sở<br>EPS 2.890 × 13×</div>
+      <div class="val-price">37.600đ</div>
+      <div class="val-upside">+35%</div>
+      <div class="val-by">Fair value ↑</div>
+    </div>
+    <div class="val-card">
+      <div class="val-method">Investing.com<br>TB 12 nhà phân tích</div>
+      <div class="val-price">35.013đ</div>
+      <div class="val-upside">+26%</div>
+      <div class="val-by">Strong Buy</div>
+    </div>
+    <div class="val-card">
+      <div class="val-method">TradingView<br>Target tích cực</div>
+      <div class="val-price">38.400đ</div>
+      <div class="val-upside">+38%</div>
+      <div class="val-by">Bull case</div>
+    </div>
+  </div>
+
+  <!-- RISK -->
+  <div style="margin-bottom:28px">
+    <h3 style="font-size:.9375rem;font-weight:600;color:var(--navy);margin-bottom:14px" class="fade-up">Rủi ro cần theo dõi</h3>
+    <div class="risk-list fade-up">
+      <div class="risk-item">
+        <span class="risk-level risk-high">CAO</span>
+        <div class="risk-content">
+          <div class="risk-title">Thép Trung Quốc giá rẻ tiếp tục áp lực</div>
+          <div class="risk-desc">Dù có thuế 23–27,83%, áp lực vẫn còn. Theo dõi sản lượng nhập khẩu HRC theo quý.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-level risk-high">CAO</span>
+        <div class="risk-content">
+          <div class="risk-title">Nợ vay tăng mạnh — >96.800 tỷ</div>
+          <div class="risk-desc">Áp lực lãi suất nếu vĩ mô xấu. DQ2 cần tiếp tục đầu tư lớn đến 2028.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-level risk-med">TRUNG BÌNH</span>
+        <div class="risk-content">
+          <div class="risk-title">Thuế quan toàn cầu — tác động gián tiếp</div>
+          <div class="risk-desc">Ảnh hưởng FDI và nhu cầu xuất khẩu. Xuất khẩu HPG đã giảm 43% năm 2025.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-level risk-med">TRUNG BÌNH</span>
+        <div class="risk-content">
+          <div class="risk-title">Giá quặng sắt & than luyện cốc biến động</div>
+          <div class="risk-desc">Chi phí đầu vào ảnh hưởng trực tiếp đến biên lợi nhuận sản xuất thép.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-level risk-low">THẤP</span>
+        <div class="risk-content">
+          <div class="risk-title">Tiến độ DQ2 chậm kỹ thuật / pháp lý</div>
+          <div class="risk-desc">Dự án phức tạp nhưng HPG có kinh nghiệm triển khai và đã hoàn thành 35% tiến độ.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DCA STRATEGY -->
+  <div class="dca-box fade-up">
+    <div class="dca-header">
+      <div class="dca-icon">▲</div>
+      <div>
+        <div class="dca-title">Hành động: Gia tăng tỷ trọng (DCA)</div>
+        <div class="dca-subtitle">Chiến lược mua phân kỳ — kiểm soát rủi ro biến động chu kỳ</div>
+      </div>
+    </div>
+    <div class="dca-grid">
+      <div class="dca-item"><div class="dca-bullet"></div><div class="dca-text"><strong>Forward P/E ~9,7× cực hấp dẫn:</strong> LN tăng 42% — PEG ratio ~0,23 (dưới 1 = rẻ theo Peter Lynch).</div></div>
+      <div class="dca-item"><div class="dca-bullet"></div><div class="dca-text"><strong>Mua phân kỳ (DCA):</strong> 3–4 đợt tại vùng 26.000–29.000đ. Trailing stop nếu phá 24.000đ.</div></div>
+      <div class="dca-item"><div class="dca-bullet"></div><div class="dca-text"><strong>Insider mua mạnh:</strong> Gia đình lãnh đạo mua ~800 tỷ tháng 4/2026. Sở hữu 35,45%.</div></div>
+      <div class="dca-item"><div class="dca-bullet"></div><div class="dca-text"><strong>Review mua thêm:</strong> LNST Q2/2026 ≥ 4.000 tỷ. Tiến độ nhà máy ray đúng hạn 11/2026.</div></div>
+      <div class="dca-item"><div class="dca-bullet"></div><div class="dca-text"><strong>Cổ tức tiền mặt trở lại:</strong> 5% cash sau 3 năm gián đoạn = tín hiệu dòng tiền cải thiện.</div></div>
+      <div class="dca-item"><div class="dca-bullet"></div><div class="dca-text"><strong>Chốt lời một phần:</strong> Giá vượt 36.000đ (P/E forward ~12,5×) → giảm 20–30% tỷ trọng.</div></div>
+    </div>
+  </div>
+
+  <!-- SIGNALS -->
+  <div class="signal-row fade-up">
+    <div class="signal-card">
+      <div class="signal-val" style="color:var(--green)">~0,23</div>
+      <div class="signal-lbl">PEG Ratio 2026<br><span style="color:var(--gray4)">Dưới 1 = rẻ (Peter Lynch)</span></div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-val" style="color:var(--navy3)">54 quỹ</div>
+      <div class="signal-lbl">Tổ chức nắm giữ<br><span style="color:var(--gray4)">Khối ngoại mua ròng 4.965 tỷ/tháng</span></div>
+    </div>
+    <div class="signal-card">
+      <div class="signal-val" style="color:var(--blue)">Top 30</div>
+      <div class="signal-lbl">Thế giới về sản lượng thép<br><span style="color:var(--gray4)">16 triệu tấn/năm từ cuối 2025</span></div>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:4px">TẬP ĐOÀN HÒA PHÁT — HPG</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.45)">HOSE: HPG · Kiểm toán KPMG · Cập nhật 25/04/2026</div>
+      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,.4)">Phân tích độc lập · Không phải tư vấn đầu tư chính thức</div>
+    </div>
+    <p class="footer-disclaimer">
+      Báo cáo này được tổng hợp từ dữ liệu công khai và BCTC đã kiểm toán của Tập đoàn Hòa Phát (KPMG Việt Nam). Báo cáo chỉ mang tính tham khảo và KHÔNG PHẢI tư vấn đầu tư chính thức. Nhà đầu tư cần tự nghiên cứu kỹ lưỡng và chịu trách nhiệm với quyết định đầu tư của mình. Đầu tư chứng khoán có rủi ro, giá cổ phiếu có thể giảm dưới mức giá mua. Các dự phóng có thể không phản ánh chính xác kết quả thực tế.
+    </p>
+  </div>
+</footer>
+
+<script>
+// ── Charts ──
+const rev = document.getElementById('revenueChart');
+const mar = document.getElementById('marginChart');
+
+new Chart(rev, {
+  type: 'bar',
+  data: {
+    labels: ['2023','2024','2025'],
+    datasets: [
+      { label: 'Doanh thu', data: [118.8, 138.9, 156.1], backgroundColor: '#93C5FD', borderRadius: 4 },
+      { label: 'LNST', data: [7.4, 12.0, 15.5], backgroundColor: '#1A3558', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { ticks: { font: { size: 10 }, color: '#9CA3AF', callback: v => v + 'k' }, grid: { color: '#F3F4F6' } },
+      x: { ticks: { font: { size: 11 }, color: '#6B7280' }, grid: { display: false } }
+    }
+  }
+});
+
+new Chart(mar, {
+  type: 'line',
+  data: {
+    labels: ['2023','2024','2025'],
+    datasets: [
+      { label: 'Biên gộp', data: [9.8, 12.6, 15.8], borderColor: '#1A3558', backgroundColor: 'rgba(26,53,88,.08)', tension: 0.4, fill: true, pointRadius: 5, pointBackgroundColor: '#1A3558', borderWidth: 2 },
+      { label: 'Biên ròng', data: [6.2, 8.7, 9.9], borderColor: '#16A34A', backgroundColor: 'rgba(22,163,74,.06)', tension: 0.4, fill: true, pointRadius: 5, pointBackgroundColor: '#16A34A', borderWidth: 2, borderDash: [4, 3] }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 0, max: 20, ticks: { font: { size: 10 }, color: '#9CA3AF', callback: v => v + '%' }, grid: { color: '#F3F4F6' } },
+      x: { ticks: { font: { size: 11 }, color: '#6B7280' }, grid: { display: false } }
+    }
+  }
+});
+
+// ── Scroll animations ──
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+// ── Nav active highlight ──
+const secs = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  links.forEach(a => {
+    const active = a.getAttribute('href') === '#' + cur;
+    a.style.color = active ? '#fff' : '';
+    a.style.fontWeight = active ? '600' : '';
+  });
+}, { passive: true });
+</script>
+</body>
+</html>
